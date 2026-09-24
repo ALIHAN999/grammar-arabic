@@ -11,6 +11,9 @@
       href="https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope/index.css"
     />
 
+    <!-- 1. ПОДКЛЮЧЕНИЕ БИБЛИОТЕКИ VK BRIDGE -->
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
     <style>
       :root {
         --paper-1: #f8f2e6;
@@ -519,7 +522,6 @@
         }
       }
     </style>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   </head>
   <body>
     <div class="bg"></div>
@@ -670,19 +672,42 @@
     </div>
 
     <script>
-      vkBridge.send('VKWebAppInit')
-        .then((data) => {
-          if (data.result) {
-            console.log('VK Bridge успешно инициализирован');
-          }
-        })
-        .catch((error) => {
-          console.error('Ошибка инициализации VK Bridge:', error);
-        });
       (function () {
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        /* --- частицы --- */
+        /* --- 2. ИНИЦИАЛИЗАЦИЯ И НАСТРОЙКА VK BRIDGE --- */
+        // Проверяем, доступен ли объект vkBridge (подключен ли скрипт)
+        if (typeof vkBridge !== 'undefined') {
+          // Событие VKWebAppInit обязательно для работы приложения.
+          vkBridge
+            .send('VKWebAppInit')
+            .then(function (data) {
+              if (data.result) {
+                console.log('VK Bridge успешно инициализирован');
+                // Устанавливаем цвета интерфейса в тон вашему приложению
+                vkBridge
+                  .send('VKWebAppSetViewSettings', {
+                    statusBarStyle: 'dark', // тёмные иконки на светлом фоне
+                    actionBarColor: '#f8f2e6', // цвет верхней панели
+                    navigationBarColor: '#f8f2e6', // цвет нижней панели (Android)
+                  })
+                  .catch(function (error) {
+                    console.error('Ошибка настройки внешнего вида:', error);
+                  });
+              } else {
+                console.warn('VKWebAppInit вернул result: false');
+              }
+            })
+            .catch(function (error) {
+              console.error('Ошибка инициализации VK Bridge:', error);
+            });
+        } else {
+          // Эта ветка выполнится, если скрипт VK Bridge не загрузился.
+          // Полезно для отладки в обычном браузере.
+          console.warn('VK Bridge не загружен. Приложение работает в режиме обычного сайта.');
+        }
+
+        /* --- ЧАСТИЦЫ --- */
         var field = document.getElementById('particles');
         if (!reduce && field) {
           var frag = document.createDocumentFragment();
@@ -701,7 +726,7 @@
           field.appendChild(frag);
         }
 
-        /* --- появление --- */
+        /* --- ПОЯВЛЕНИЕ --- */
         var items = document.querySelectorAll('.reveal');
         if (reduce || !('IntersectionObserver' in window)) {
           items.forEach(function (el) {
@@ -724,7 +749,7 @@
           });
         }
 
-        /* --- ripple --- */
+        /* --- RIPPLE --- */
         function ripple(card, x, y) {
           if (reduce) return;
           var rect = card.getBoundingClientRect();
@@ -740,7 +765,7 @@
           }, 640);
         }
 
-        /* --- переход --- */
+        /* --- ПЕРЕХОД --- */
         var veil = document.getElementById('veil');
         var navigating = false;
 
