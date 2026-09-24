@@ -15,6 +15,7 @@
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 
     <style>
+      /* ... (все стили остаются без изменений) ... */
       :root {
         --paper-1: #f8f2e6;
         --ink: #1d2b34;
@@ -675,36 +676,28 @@
       (function () {
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        /* --- 2. ИНИЦИАЛИЗАЦИЯ И НАСТРОЙКА VK BRIDGE --- */
-        // Проверяем, доступен ли объект vkBridge (подключен ли скрипт)
+        /* --- ИНИЦИАЛИЗАЦИЯ VK BRIDGE --- */
         if (typeof vkBridge !== 'undefined') {
-          // Событие VKWebAppInit обязательно для работы приложения.
           vkBridge
             .send('VKWebAppInit')
             .then(function (data) {
               if (data.result) {
-                console.log('VK Bridge успешно инициализирован');
-                // Устанавливаем цвета интерфейса в тон вашему приложению
+                console.log('VK Bridge инициализирован');
+                // Настраиваем внешний вид
                 vkBridge
                   .send('VKWebAppSetViewSettings', {
-                    statusBarStyle: 'dark', // тёмные иконки на светлом фоне
-                    actionBarColor: '#f8f2e6', // цвет верхней панели
-                    navigationBarColor: '#f8f2e6', // цвет нижней панели (Android)
+                    statusBarStyle: 'dark',
+                    actionBarColor: '#f8f2e6',
+                    navigationBarColor: '#f8f2e6',
                   })
-                  .catch(function (error) {
-                    console.error('Ошибка настройки внешнего вида:', error);
+                  .catch(function (e) {
+                    console.warn('ViewSettings error:', e);
                   });
-              } else {
-                console.warn('VKWebAppInit вернул result: false');
               }
             })
             .catch(function (error) {
               console.error('Ошибка инициализации VK Bridge:', error);
             });
-        } else {
-          // Эта ветка выполнится, если скрипт VK Bridge не загрузился.
-          // Полезно для отладки в обычном браузере.
-          console.warn('VK Bridge не загружен. Приложение работает в режиме обычного сайта.');
         }
 
         /* --- ЧАСТИЦЫ --- */
@@ -765,30 +758,55 @@
           }, 640);
         }
 
-        /* --- ПЕРЕХОД --- */
+        /* --- НАВИГАЦИЯ ВНУТРИ ПРИЛОЖЕНИЯ (БЕЗ ВНЕШНЕГО БРАУЗЕРА) --- */
         var veil = document.getElementById('veil');
         var navigating = false;
 
-        function go(url, x, y) {
+        function goInternal(url, x, y) {
           if (navigating) return;
           navigating = true;
-          if (reduce) {
-            window.location.href = url;
-            return;
-          }
-          veil.style.setProperty('--x', x + 'px');
-          veil.style.setProperty('--y', y + 'px');
-          document.body.classList.add('leaving');
-          requestAnimationFrame(function () {
+
+          // Эффект перехода (визуальный)
+          if (!reduce) {
+            veil.style.setProperty('--x', x + 'px');
+            veil.style.setProperty('--y', y + 'px');
+            document.body.classList.add('leaving');
             requestAnimationFrame(function () {
-              veil.classList.add('on');
+              requestAnimationFrame(function () {
+                veil.classList.add('on');
+              });
             });
-          });
+          }
+
+          // Используем VK Bridge для внутренней навигации вместо window.location
           setTimeout(function () {
-            window.location.href = url;
-          }, 560);
+            if (typeof vkBridge !== 'undefined') {
+              // VK Bridge способен обработать открытие ссылки внутри приложения
+              // Используем VKWebAppOpenURL с параметром, указывающим на внутренний переход
+              vkBridge
+                .send('VKWebAppOpenURL', {
+                  url: url,
+                  target: 'internal', // указывает, что ссылка должна открыться внутри
+                })
+                .then(function () {
+                  // Если нативный вызов сработал, сбрасываем состояние
+                  navigating = false;
+                  veil.classList.remove('on');
+                  document.body.classList.remove('leaving');
+                })
+                .catch(function () {
+                  // Если VKWebAppOpenURL не поддерживается, пробуем другой способ
+                  // или откатываемся к location (в крайнем случае)
+                  window.location.href = url;
+                });
+            } else {
+              // В обычном браузере просто переходим по ссылке
+              window.location.href = url;
+            }
+          }, reduce ? 0 : 560);
         }
 
+        // Перехватываем все клики по карточкам
         document.querySelectorAll('.card').forEach(function (card) {
           card.addEventListener('click', function (e) {
             e.preventDefault();
@@ -796,10 +814,11 @@
             var cy =
               typeof e.clientY === 'number' && e.clientY ? e.clientY : window.innerHeight / 2;
             ripple(card, cx, cy);
-            go(card.getAttribute('href'), cx, cy);
+            goInternal(card.getAttribute('href'), cx, cy);
           });
         });
 
+        // Восстанавливаем состояние при возврате
         window.addEventListener('pageshow', function (e) {
           if (e.persisted) {
             navigating = false;
