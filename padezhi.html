@@ -1,0 +1,1579 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f2e8" />
+    <title>Падежи — Грамматика арабского языка</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope/index.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource-variable/literata/index.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic/index.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic/700.css"
+    />
+
+    <style>
+      :root {
+        --paper-1: #f8f2e6;
+        --ink: #1d2b34;
+        --ink-soft: #3c4d57;
+        --muted: #7b8a92;
+        --gold: #a9762a;
+        --gold-lt: #d9ab5c;
+        --gold-dk: #7d5620;
+        --ar: #9a6420; /* цвет арабского текста */
+        --nom: #0f8f66; /* именительный */
+        --acc: #2b6fc4; /* винительный */
+        --gen: #bf6c2c; /* родительный */
+        --bad: #c2504f;
+        --line: rgba(120, 92, 44, 0.16);
+        --r: 22px;
+        --shadow: 0 20px 44px -26px rgba(120, 92, 44, 0.6), 0 2px 8px -4px rgba(120, 92, 44, 0.22);
+        --maxw: 600px;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: 'Literata Variable', 'Literata', Georgia, serif;
+        font-size: clamp(16px, 4.3vw, 17.5px);
+        line-height: 1.95;
+        color: var(--ink);
+        background: var(--paper-1);
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ---------- фон ---------- */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        background:
+          radial-gradient(120% 80% at 50% -12%, #fffefb 0%, #fbf6ec 38%, #f3ecdc 72%),
+          linear-gradient(180deg, #fffdf7, #f8f2e6 55%, #f1e8d6);
+      }
+      .bg::after {
+        content: '';
+        position: absolute;
+        inset: -20%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84'%3E%3Cg fill='none' stroke='%23a9762a' stroke-width='1'%3E%3Cpath d='M42 3 L51 33 L81 42 L51 51 L42 81 L33 51 L3 42 L33 33 Z'/%3E%3Crect x='16' y='16' width='52' height='52'/%3E%3Ccircle cx='42' cy='42' r='5.5'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 84px 84px;
+        opacity: 0.075;
+        animation: drift 70s linear infinite;
+      }
+      @keyframes drift {
+        to {
+          background-position: 336px 336px;
+        }
+      }
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(70px);
+        z-index: -2;
+        pointer-events: none;
+        opacity: 0.5;
+        mix-blend-mode: multiply;
+      }
+      .orb-a {
+        width: 330px;
+        height: 330px;
+        left: -140px;
+        top: -90px;
+        background: radial-gradient(circle, rgba(94, 214, 168, 0.5), transparent 68%);
+        animation: orbFloat 19s ease-in-out infinite;
+      }
+      .orb-b {
+        width: 380px;
+        height: 380px;
+        right: -170px;
+        top: 38%;
+        background: radial-gradient(circle, rgba(217, 171, 92, 0.5), transparent 68%);
+        animation: orbFloat 23s ease-in-out infinite reverse;
+      }
+      .vignette {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: radial-gradient(
+          95% 65% at 50% 40%,
+          transparent 44%,
+          rgba(150, 118, 62, 0.13) 100%
+        );
+      }
+      @keyframes orbFloat {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(24px, -32px, 0) scale(1.1);
+        }
+      }
+
+      /* ---------- шапка ---------- */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 253, 247, 0.95),
+          rgba(255, 253, 247, 0.7) 70%,
+          rgba(255, 253, 247, 0)
+        );
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      .back {
+        width: 42px;
+        height: 42px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        text-decoration: none;
+        border-radius: 14px;
+        color: var(--gold-dk);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--line);
+        box-shadow: 0 6px 16px -10px rgba(120, 92, 44, 0.7);
+        transition:
+          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+          background 0.35s,
+          border-color 0.35s,
+          color 0.35s;
+      }
+      .back svg {
+        width: 19px;
+        height: 19px;
+      }
+      .back:hover {
+        background: var(--gold-lt);
+        border-color: var(--gold);
+        color: #fffdf7;
+        transform: translateX(-3px);
+      }
+      .topbar-txt {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+      }
+      .topbar-txt .t {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 16px;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topbar-txt .s {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        color: var(--gold);
+        font-size: 14px;
+        margin-top: 3px;
+        line-height: 1.9;
+        font-weight: 700;
+      }
+      .progress {
+        position: sticky;
+        top: 0;
+        z-index: 41;
+        height: 2px;
+        margin-top: -2px;
+        background: rgba(120, 92, 44, 0.12);
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--nom), var(--gold) 50%, var(--acc));
+        box-shadow: 0 0 10px rgba(169, 118, 42, 0.55);
+      }
+
+      /* ---------- макет ---------- */
+      main {
+        width: 100%;
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 14px 22px calc(env(safe-area-inset-bottom) + 70px);
+      }
+      section {
+        margin-bottom: 44px;
+      }
+
+      .eyebrow {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 800;
+        margin: 0 0 14px;
+      }
+      h1 {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: clamp(32px, 9vw, 42px);
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+        margin: 0;
+        color: var(--ink);
+      }
+      .ar-hero {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        text-align: center;
+        font-size: clamp(38px, 11vw, 50px);
+        font-weight: 700;
+        line-height: 2.2;
+        color: var(--gold);
+        margin: 20px 0 0;
+      }
+      .lead {
+        margin: 22px 0 0;
+        color: var(--ink-soft);
+      }
+      h2 {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: clamp(21px, 5.6vw, 25px);
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+        color: var(--ink);
+      }
+      .sec-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+        margin-bottom: 20px;
+      }
+      .sec-num {
+        font-family: 'Manrope Variable', sans-serif;
+        flex: none;
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        font-size: 12.5px;
+        font-weight: 800;
+        color: #fffdf7;
+        margin-top: 4px;
+        background: linear-gradient(150deg, var(--gold-lt), var(--gold));
+        box-shadow: 0 8px 20px -12px rgba(169, 118, 42, 1);
+      }
+      .sec-sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.8;
+      }
+      p {
+        margin: 0 0 18px;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+      b {
+        color: var(--ink);
+      }
+
+      /* ---------- «воздух» для арабского ---------- */
+      .ar {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        unicode-bidi: isolate;
+        color: var(--ar);
+        font-size: 1.18em;
+        font-weight: 700;
+        line-height: 2.4;
+        padding-inline: 0.28em;
+        margin-inline: 0.34em;
+      }
+      .ar-term {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        unicode-bidi: isolate;
+        color: #3a2a10;
+        background: linear-gradient(140deg, #eccb90, var(--gold-lt));
+        border: 1px solid rgba(169, 118, 42, 0.35);
+        border-radius: 8px;
+        padding: 0.06em 0.5em;
+        margin-inline: 0.42em;
+        font-size: 1.06em;
+        font-weight: 700;
+        line-height: 2.2;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px -6px rgba(169, 118, 42, 0.8);
+      }
+      .ar-block {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        text-align: right;
+        color: var(--ar);
+        font-size: clamp(22px, 6.1vw, 27px);
+        font-weight: 700;
+        line-height: 2.6;
+        word-spacing: 0.06em;
+        padding: 14px 4px 16px;
+      }
+      .translit {
+        font-family: 'Manrope Variable', sans-serif;
+        font-style: italic;
+        font-size: 14.5px;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+        line-height: 1.7;
+        margin: 0;
+      }
+      .ru {
+        font-size: 16.5px;
+        color: var(--ink-soft);
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      .example {
+        border-radius: 18px;
+        padding: 6px 18px 16px;
+        background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.6));
+        border: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        box-shadow:
+          0 12px 28px -22px rgba(120, 92, 44, 0.8),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
+      }
+      .example .tag {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 10.5px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 800;
+        margin: 0;
+        padding-top: 12px;
+      }
+
+      /* ---------- карточки падежей ---------- */
+      .case-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .case {
+        --accent: var(--nom);
+        position: relative;
+        border-radius: var(--r);
+        padding: 20px 18px 18px;
+        overflow: hidden;
+        background: linear-gradient(
+          155deg,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.68) 50%,
+          rgba(255, 255, 255, 0.88)
+        );
+        border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+        box-shadow: var(--shadow);
+        transition:
+          transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-color 0.4s,
+          box-shadow 0.4s;
+      }
+      .case::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, transparent, var(--accent), transparent);
+        opacity: 0.9;
+      }
+      .case::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        background: radial-gradient(
+          120% 90% at 100% 0%,
+          color-mix(in srgb, var(--accent) 12%, transparent),
+          transparent 60%
+        );
+      }
+      .case:hover {
+        transform: translateY(-3px);
+        border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+        box-shadow: 0 26px 50px -24px rgba(120, 92, 44, 0.65);
+      }
+
+      .case-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .case-badge {
+        width: 52px;
+        height: 52px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        border-radius: 16px;
+        font-family: 'Noto Naskh Arabic', serif;
+        font-size: 23px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--accent);
+        direction: rtl;
+        background: color-mix(in srgb, var(--accent) 12%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+        box-shadow:
+          0 10px 22px -14px color-mix(in srgb, var(--accent) 90%, transparent),
+          inset 0 0 16px color-mix(in srgb, var(--accent) 10%, transparent);
+        animation: breathe 4.5s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          box-shadow:
+            0 10px 22px -16px color-mix(in srgb, var(--accent) 80%, transparent),
+            inset 0 0 14px color-mix(in srgb, var(--accent) 8%, transparent);
+        }
+        50% {
+          box-shadow:
+            0 14px 28px -12px color-mix(in srgb, var(--accent) 95%, transparent),
+            inset 0 0 22px color-mix(in srgb, var(--accent) 18%, transparent);
+        }
+      }
+      .case-name {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 18.5px;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+        color: var(--ink);
+      }
+      .case-ar {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        font-size: 16px;
+        color: var(--accent);
+        font-weight: 700;
+        line-height: 2;
+        margin-top: 2px;
+      }
+      .case-when {
+        font-size: 15.5px;
+        color: var(--ink-soft);
+        line-height: 1.8;
+        margin: 0 0 16px;
+        padding-left: 14px;
+        border-left: 2px solid color-mix(in srgb, var(--accent) 34%, transparent);
+      }
+      .case .example {
+        background: rgba(255, 255, 255, 0.6);
+        border-color: color-mix(in srgb, var(--accent) 16%, transparent);
+      }
+
+      /* ---------- интерактивное демо ---------- */
+      .demo {
+        border-radius: var(--r);
+        overflow: hidden;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 8px;
+        background: rgba(120, 92, 44, 0.07);
+        border-bottom: 1px solid var(--line);
+      }
+      .tab {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 12.5px;
+        letter-spacing: 0.01em;
+        flex: 1;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 13px;
+        padding: 10px 4px;
+        cursor: pointer;
+        transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .tab:hover {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.7);
+      }
+      .tab[aria-selected='true'] {
+        color: #fffdf7;
+        background: linear-gradient(
+          140deg,
+          color-mix(in srgb, var(--accent) 82%, #fff),
+          var(--accent)
+        );
+        border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+        box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--accent) 95%, transparent);
+      }
+      .panels {
+        padding: 22px 18px 24px;
+      }
+      .panel {
+        display: none;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .panel.is-active {
+        display: flex;
+        animation: panelIn 0.5s cubic-bezier(0.19, 0.85, 0.24, 1);
+      }
+      @keyframes panelIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .panel-role {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 800;
+      }
+      .panel-ar {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        text-align: right;
+        font-size: clamp(26px, 7.4vw, 33px);
+        font-weight: 700;
+        line-height: 2.7;
+        word-spacing: 0.06em;
+        color: var(--ar);
+        padding: 8px 2px;
+        margin: 2px 0;
+      }
+      .panel-ar .hi {
+        color: var(--accent);
+        animation: pulseHi 2.4s ease-in-out infinite;
+      }
+      @keyframes pulseHi {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.62;
+        }
+      }
+      .ending {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        border-radius: 14px;
+        align-self: flex-start;
+        background: color-mix(in srgb, var(--accent) 10%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+      }
+      .ending .mark {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        font-size: 26px;
+        line-height: 1.6;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .ending .lbl {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 12.5px;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+      .ending .lbl small {
+        display: block;
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 11.5px;
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        line-height: 1.9;
+      }
+      .why {
+        font-size: 15.5px;
+        line-height: 1.85;
+        color: var(--ink-soft);
+        margin: 0;
+      }
+
+      /* ---------- таблица ---------- */
+      .table {
+        border-radius: var(--r);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+        box-shadow: var(--shadow);
+      }
+      .trow {
+        display: grid;
+        grid-template-columns: 1fr 78px;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 18px;
+        border-bottom: 1px solid rgba(120, 92, 44, 0.1);
+        transition: background 0.35s;
+      }
+      .trow:last-child {
+        border-bottom: 0;
+      }
+      .trow:hover {
+        background: rgba(255, 255, 255, 0.75);
+      }
+      .trow.head {
+        background: rgba(120, 92, 44, 0.08);
+        padding: 12px 18px;
+      }
+      .trow.head span {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 10.5px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .trow.head span:last-child {
+        text-align: center;
+      }
+      .tname {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 15px;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+      .tname em {
+        display: block;
+        font-style: normal;
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        color: var(--c);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 2;
+        margin-top: 4px;
+      }
+      .tmark {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        text-align: center;
+        font-size: 30px;
+        line-height: 1.7;
+        font-weight: 700;
+        color: var(--c);
+      }
+
+      .tanwin {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .tchip {
+        border-radius: 16px;
+        padding: 14px 8px;
+        text-align: center;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62));
+        border: 1px solid color-mix(in srgb, var(--c) 26%, transparent);
+        box-shadow: 0 10px 24px -20px rgba(120, 92, 44, 0.9);
+        transition:
+          transform 0.35s,
+          border-color 0.35s,
+          background 0.35s;
+      }
+      .tchip:hover {
+        transform: translateY(-3px);
+        border-color: color-mix(in srgb, var(--c) 55%, transparent);
+        background: color-mix(in srgb, var(--c) 8%, #fff);
+      }
+      .tchip .w {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 2.1;
+        color: var(--c);
+      }
+      .tchip .t {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 11.5px;
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.5;
+        margin-top: 6px;
+      }
+
+      /* ---------- предлоги ---------- */
+      .preps {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .prep {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 14px 10px;
+        border-radius: 16px;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62));
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 24px -20px rgba(120, 92, 44, 0.9);
+        transition:
+          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-color 0.35s,
+          background 0.35s;
+      }
+      .prep:hover {
+        transform: translateY(-3px);
+        background: color-mix(in srgb, var(--gen) 9%, #fff);
+        border-color: color-mix(in srgb, var(--gen) 42%, transparent);
+      }
+      .prep .a {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 2.1;
+        color: var(--gen);
+      }
+      .prep .r {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 12.5px;
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      /* ---------- шаги ---------- */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .step {
+        position: relative;
+        padding: 16px 18px 16px 58px;
+        border-radius: 18px;
+        background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.65));
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 26px -22px rgba(120, 92, 44, 0.9);
+        transition:
+          transform 0.35s,
+          border-color 0.35s;
+      }
+      .step:hover {
+        transform: translateX(4px);
+        border-color: rgba(169, 118, 42, 0.4);
+      }
+      .step-num {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        color: #fffdf7;
+        background: linear-gradient(150deg, var(--gold-lt), var(--gold));
+        box-shadow: 0 8px 18px -10px rgba(169, 118, 42, 1);
+      }
+      .step p {
+        margin: 0;
+        font-size: 15.5px;
+        line-height: 1.8;
+        color: var(--ink-soft);
+      }
+
+      /* ---------- заметка ---------- */
+      .note {
+        border-radius: var(--r);
+        padding: 20px 18px;
+        background: linear-gradient(
+          150deg,
+          color-mix(in srgb, var(--acc) 9%, #fff),
+          rgba(255, 255, 255, 0.75)
+        );
+        border: 1px solid color-mix(in srgb, var(--acc) 26%, transparent);
+        box-shadow: var(--shadow);
+      }
+      .note .nt {
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        color: var(--acc);
+        margin: 0 0 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+      .duo {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+      .duo .d {
+        flex: 1 1 140px;
+        border-radius: 14px;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .duo .d .a {
+        font-family: 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 2.1;
+        color: var(--ar);
+      }
+      .duo .d .r {
+        font-family: 'Manrope Variable', sans-serif;
+        font-size: 11.5px;
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      /* ---------- кнопка в меню ---------- */
+      .menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Manrope Variable', sans-serif;
+        font-weight: 800;
+        font-size: 15.5px;
+        text-decoration: none;
+        color: #fffdf7;
+        padding: 16px 22px;
+        border-radius: 20px;
+        background: linear-gradient(140deg, var(--gold-lt), var(--gold) 62%, #8f6324);
+        border: 1px solid rgba(125, 86, 32, 0.35);
+        box-shadow: 0 18px 36px -18px rgba(169, 118, 42, 0.85);
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.35s;
+      }
+      .menu-btn::after {
+        content: '';
+        position: absolute;
+        top: -60%;
+        left: -70%;
+        width: 48%;
+        height: 220%;
+        background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+        transform: rotate(14deg);
+        transition: transform 0.8s cubic-bezier(0.3, 0.8, 0.2, 1);
+      }
+      .menu-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 24px 44px -18px rgba(169, 118, 42, 1);
+      }
+      .menu-btn:hover::after {
+        transform: rotate(14deg) translateX(440%);
+      }
+      .menu-btn:active {
+        transform: scale(0.985);
+      }
+      .menu-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* ---------- появление ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+      .reveal.in {
+        animation: rise 0.85s cubic-bezier(0.19, 0.85, 0.24, 1) forwards;
+        animation-delay: calc(var(--i, 0) * 90ms);
+      }
+      @keyframes rise {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ---------- переход ---------- */
+      .veil {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        pointer-events: none;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(
+          circle at var(--x, 50%) var(--y, 50%),
+          rgba(255, 253, 247, 0.98) 0%,
+          rgba(217, 171, 92, 0.92) 30%,
+          rgba(169, 118, 42, 0.96) 66%
+        );
+        clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+        transition: clip-path 0.58s cubic-bezier(0.65, 0, 0.15, 1);
+      }
+      .veil.on {
+        clip-path: circle(160vmax at var(--x, 50%) var(--y, 50%));
+      }
+      .veil-mark {
+        width: 96px;
+        height: 96px;
+        opacity: 0;
+        transform: scale(0.55) rotate(-40deg);
+        color: #fffdf7;
+        transition:
+          opacity 0.4s 0.18s,
+          transform 0.6s 0.18s cubic-bezier(0.2, 0.9, 0.2, 1);
+      }
+      .veil.on .veil-mark {
+        opacity: 0.95;
+        transform: scale(1) rotate(0);
+      }
+      .veil-mark svg {
+        width: 100%;
+        height: 100%;
+        animation: spin 9s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      body.leaving main {
+        animation: fadeOut 0.42s ease forwards;
+      }
+      @keyframes fadeOut {
+        to {
+          opacity: 0.2;
+          transform: scale(0.99);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="vignette"></div>
+
+    <header class="topbar">
+      <a class="back" href="index.html" aria-label="Назад в меню">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 5l-7 7 7 7" />
+        </svg>
+      </a>
+      <div class="topbar-txt">
+        <span class="t">Падежи</span>
+        <span class="s" lang="ar" dir="rtl">الإِعْرَاب</span>
+      </div>
+    </header>
+    <div class="progress"><i id="bar"></i></div>
+
+    <main>
+      <section class="reveal in" style="--i: 0">
+        <p class="eyebrow">Раздел ٠١</p>
+        <h1>Падежи</h1>
+        <div class="ar-hero" lang="ar" dir="rtl">الإِعْرَاب</div>
+        <p class="lead">
+          Коротко и без сложных терминов: что такое падеж в арабском языке, какие они бывают и как
+          понять, какой падеж нужен в предложении.
+        </p>
+      </section>
+
+      <!-- 1 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">1</span>
+          <div>
+            <h2>Что такое падеж</h2>
+            <p class="sec-sub">Начнём с того, что вам уже знакомо</p>
+          </div>
+        </div>
+
+        <p>
+          В русском языке слова меняются по падежам: <em>книга</em> — <em>книги</em> —
+          <em>книгу</em>. По окончанию мы понимаем, какую роль слово играет в предложении.
+        </p>
+        <p>
+          В арабском работает тот же принцип, но вместо окончаний-букв роль играют
+          <b>огласовки</b> — маленькие значки над и под буквами. Такое изменение окончания слова
+          называется
+          <span class="ar-term" lang="ar" dir="rtl">الإِعْرَاب</span>
+          — «и'раб».
+        </p>
+        <p>
+          Смысл простой: <b>падеж показывает роль слова в предложении</b>. Кто совершает действие —
+          один падеж. На кого действие направлено — другой. Слово стоит после предлога — третий.
+        </p>
+      </section>
+
+      <!-- 2 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">2</span>
+          <div>
+            <h2>Три основных падежа</h2>
+            <p class="sec-sub">У каждого — своя огласовка на конце слова</p>
+          </div>
+        </div>
+
+        <div class="case-list">
+          <article class="case reveal" style="--accent: var(--nom)">
+            <div class="case-top">
+              <span class="case-badge" lang="ar" dir="rtl">ـُ</span>
+              <span>
+                <span class="case-name">Именительный</span>
+                <span class="case-ar" lang="ar" dir="rtl">الرَّفْع · مَرْفُوع</span>
+              </span>
+            </div>
+            <p class="case-when">
+              <b>Кто? Что?</b> Это подлежащее — тот, кто совершает действие, или слово-описание
+              после него.
+            </p>
+            <div class="example" style="--accent: var(--nom)">
+              <p class="tag">Пример</p>
+              <p class="ar-block" lang="ar" dir="rtl">الرَّجُلُ كَرِيمٌ</p>
+              <p class="translit">ар-раджулу каримун</p>
+              <p class="ru">
+                «Мужчина щедрый» — оба слова в именительном падеже, у обоих на конце <b>дамма</b>.
+              </p>
+            </div>
+          </article>
+
+          <article class="case reveal" style="--accent: var(--acc)">
+            <div class="case-top">
+              <span class="case-badge" lang="ar" dir="rtl">ـَ</span>
+              <span>
+                <span class="case-name">Винительный</span>
+                <span class="case-ar" lang="ar" dir="rtl">النَّصْب · مَنْصُوب</span>
+              </span>
+            </div>
+            <p class="case-when">
+              <b>Кого? Что?</b> Это дополнение — то, на что направлено действие глагола.
+            </p>
+            <div class="example" style="--accent: var(--acc)">
+              <p class="tag">Пример</p>
+              <p class="ar-block" lang="ar" dir="rtl">قَرَأْتُ الكِتَابَ</p>
+              <p class="translit">кара’туль-китаба</p>
+              <p class="ru">
+                «Я прочитал книгу» — книгу читают, значит это дополнение, на конце <b>фатха</b>.
+              </p>
+            </div>
+          </article>
+
+          <article class="case reveal" style="--accent: var(--gen)">
+            <div class="case-top">
+              <span class="case-badge" lang="ar" dir="rtl">ـِ</span>
+              <span>
+                <span class="case-name">Родительный</span>
+                <span class="case-ar" lang="ar" dir="rtl">الجَرّ · مَجْرُور</span>
+              </span>
+            </div>
+            <p class="case-when">
+              <b>Кого? Чего? Где?</b> Слово стоит после предлога или принадлежит другому слову
+              (идафа).
+            </p>
+            <div class="example" style="--accent: var(--gen)">
+              <p class="tag">Пример</p>
+              <p class="ar-block" lang="ar" dir="rtl">ذَهَبْتُ إِلَى المَدْرَسَةِ</p>
+              <p class="translit">захабту иляль-мадрасати</p>
+              <p class="ru">
+                «Я пошёл в школу» — после предлога
+                <span class="ar" lang="ar" dir="rtl">إِلَى</span> всегда идёт родительный падеж, на
+                конце <b>касра</b>.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">3</span>
+          <div>
+            <h2>Одно слово — три роли</h2>
+            <p class="sec-sub">Нажимайте на падежи и смотрите, что меняется</p>
+          </div>
+        </div>
+
+        <div class="demo" id="demo">
+          <div class="tabs" role="tablist" aria-label="Выбор падежа">
+            <button
+              class="tab"
+              role="tab"
+              id="tab-nom"
+              aria-controls="p-nom"
+              aria-selected="true"
+              data-case="nom"
+              style="--accent: var(--nom)"
+            >
+              Именит.
+            </button>
+            <button
+              class="tab"
+              role="tab"
+              id="tab-acc"
+              aria-controls="p-acc"
+              aria-selected="false"
+              data-case="acc"
+              style="--accent: var(--acc)"
+            >
+              Винит.
+            </button>
+            <button
+              class="tab"
+              role="tab"
+              id="tab-gen"
+              aria-controls="p-gen"
+              aria-selected="false"
+              data-case="gen"
+              style="--accent: var(--gen)"
+            >
+              Родит.
+            </button>
+          </div>
+
+          <div class="panels">
+            <div
+              class="panel is-active"
+              id="p-nom"
+              role="tabpanel"
+              aria-labelledby="tab-nom"
+              style="--accent: var(--nom)"
+            >
+              <span class="panel-role">Подлежащее · кто совершает действие</span>
+              <p class="panel-ar" lang="ar" dir="rtl">جَاءَ <span class="hi">الطَّالِبُ</span></p>
+              <span class="ending">
+                <span class="mark" lang="ar" dir="rtl">ـُ</span>
+                <span class="lbl">дамма<small lang="ar" dir="rtl">الضَّمَّة</small></span>
+              </span>
+              <p class="translit">джа’а ат-талибу</p>
+              <p class="ru">«Студент пришёл»</p>
+              <p class="why">
+                Студент <b>сам</b> совершает действие, поэтому он подлежащее — именительный падеж.
+              </p>
+            </div>
+
+            <div
+              class="panel"
+              id="p-acc"
+              role="tabpanel"
+              aria-labelledby="tab-acc"
+              style="--accent: var(--acc)"
+            >
+              <span class="panel-role">Дополнение · на кого направлено действие</span>
+              <p class="panel-ar" lang="ar" dir="rtl">
+                رَأَيْتُ <span class="hi">الطَّالِبَ</span>
+              </p>
+              <span class="ending">
+                <span class="mark" lang="ar" dir="rtl">ـَ</span>
+                <span class="lbl">фатха<small lang="ar" dir="rtl">الفَتْحَة</small></span>
+              </span>
+              <p class="translit">ра’айту ат-талиба</p>
+              <p class="ru">«Я увидел студента»</p>
+              <p class="why">
+                Теперь студента <b>видят</b> — действие направлено на него, значит винительный
+                падеж.
+              </p>
+            </div>
+
+            <div
+              class="panel"
+              id="p-gen"
+              role="tabpanel"
+              aria-labelledby="tab-gen"
+              style="--accent: var(--gen)"
+            >
+              <span class="panel-role">После предлога</span>
+              <p class="panel-ar" lang="ar" dir="rtl">
+                مَرَرْتُ <span class="hi">بِالطَّالِبِ</span>
+              </p>
+              <span class="ending">
+                <span class="mark" lang="ar" dir="rtl">ـِ</span>
+                <span class="lbl">касра<small lang="ar" dir="rtl">الكَسْرَة</small></span>
+              </span>
+              <p class="translit">марарту би-т-талиби</p>
+              <p class="ru">«Я прошёл мимо студента»</p>
+              <p class="why">
+                Слово стоит после предлога <span class="ar" lang="ar" dir="rtl">بِ</span> — а
+                предлоги всегда требуют родительного падежа.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">4</span>
+          <div>
+            <h2>Шпаргалка по окончаниям</h2>
+            <p class="sec-sub">Для обычного слова в единственном числе</p>
+          </div>
+        </div>
+
+        <div class="table">
+          <div class="trow head"><span>Падеж</span><span>Окончание</span></div>
+          <div class="trow" style="--c: var(--nom)">
+            <span class="tname">Именительный<em lang="ar" dir="rtl">مَرْفُوع · الرَّفْع</em></span>
+            <span class="tmark" lang="ar" dir="rtl">ـُ</span>
+          </div>
+          <div class="trow" style="--c: var(--acc)">
+            <span class="tname">Винительный<em lang="ar" dir="rtl">مَنْصُوب · النَّصْب</em></span>
+            <span class="tmark" lang="ar" dir="rtl">ـَ</span>
+          </div>
+          <div class="trow" style="--c: var(--gen)">
+            <span class="tname">Родительный<em lang="ar" dir="rtl">مَجْرُور · الجَرّ</em></span>
+            <span class="tmark" lang="ar" dir="rtl">ـِ</span>
+          </div>
+        </div>
+
+        <p style="margin-top: 22px">
+          Если у слова нет артикля
+          <span class="ar" lang="ar" dir="rtl">ال</span>, огласовка удваивается — это называется
+          <b>танвин</b>. Смысл падежа от этого не меняется:
+        </p>
+
+        <div class="tanwin">
+          <div class="tchip" style="--c: var(--nom)">
+            <div class="w" lang="ar" dir="rtl">كِتَابٌ</div>
+            <div class="t">китабун<br />именительный</div>
+          </div>
+          <div class="tchip" style="--c: var(--acc)">
+            <div class="w" lang="ar" dir="rtl">كِتَابًا</div>
+            <div class="t">китабан<br />винительный</div>
+          </div>
+          <div class="tchip" style="--c: var(--gen)">
+            <div class="w" lang="ar" dir="rtl">كِتَابٍ</div>
+            <div class="t">китабин<br />родительный</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">5</span>
+          <div>
+            <h2>Предлоги тянут родительный</h2>
+            <p class="sec-sub">Запомните их — и половина ошибок уйдёт сама</p>
+          </div>
+        </div>
+
+        <p>
+          После любого из этих предлогов слово всегда получает касру
+          <span class="ar" lang="ar" dir="rtl">ـِ</span>:
+        </p>
+
+        <div class="preps">
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">مِنْ</span><span class="r">из, от</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">إِلَى</span><span class="r">в, к</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">فِي</span><span class="r">в, внутри</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">عَلَى</span><span class="r">на</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">عَنْ</span><span class="r">о, от</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">بِ</span><span class="r">с, при помощи</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">لِ</span><span class="r">для, кому</span>
+          </div>
+          <div class="prep">
+            <span class="a" lang="ar" dir="rtl">كَ</span><span class="r">как, подобно</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section class="reveal">
+        <div class="sec-head">
+          <span class="sec-num">6</span>
+          <div>
+            <h2>Как определить падеж</h2>
+            <p class="sec-sub">Три шага для любого предложения</p>
+          </div>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <p><b>Найдите глагол и предлоги.</b> Это главные «указатели» падежа в предложении.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <p>
+              <b>Определите роль слова.</b> Действующее лицо — именительный. Объект действия —
+              винительный. После предлога или в идафе — родительный.
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <p>
+              <b>Поставьте огласовку на последнюю букву:</b>
+              <span class="ar" lang="ar" dir="rtl">ـُ</span>
+              <span class="ar" lang="ar" dir="rtl">ـَ</span> или
+              <span class="ar" lang="ar" dir="rtl">ـِ</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section class="reveal">
+        <div class="note">
+          <p class="nt">Чуть дальше</p>
+          <p style="margin: 0">
+            У двойственного числа и у «правильного» мужского множественного падеж показывается не
+            огласовкой, а особым окончанием. Огласовка меняется и в нём:
+          </p>
+          <div class="duo">
+            <div class="d">
+              <span class="a" lang="ar" dir="rtl">مُعَلِّمَانِ</span>
+              <span class="r">двойственное · именительный</span>
+            </div>
+            <div class="d">
+              <span class="a" lang="ar" dir="rtl">مُعَلِّمَيْنِ</span>
+              <span class="r">двойственное · винительный и родительный</span>
+            </div>
+            <div class="d">
+              <span class="a" lang="ar" dir="rtl">مُعَلِّمُونَ</span>
+              <span class="r">множественное · именительный</span>
+            </div>
+            <div class="d">
+              <span class="a" lang="ar" dir="rtl">مُعَلِّمِينَ</span>
+              <span class="r">множественное · винительный и родительный</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <a class="menu-btn reveal" href="index.html">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 5l-7 7 7 7" />
+        </svg>
+        В меню
+      </a>
+    </main>
+
+    <div class="veil" id="veil" aria-hidden="true">
+      <span class="veil-mark">
+        <svg viewBox="0 0 200 200" fill="none">
+          <g stroke="currentColor" stroke-width="4" opacity=".9">
+            <rect x="45" y="45" width="110" height="110" />
+            <rect x="45" y="45" width="110" height="110" transform="rotate(45 100 100)" />
+            <circle cx="100" cy="100" r="88" />
+            <circle cx="100" cy="100" r="30" />
+          </g>
+        </svg>
+      </span>
+    </div>
+
+    <script>
+      (function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* --- появление секций --- */
+        var items = document.querySelectorAll('.reveal');
+        if (reduce || !('IntersectionObserver' in window)) {
+          items.forEach(function (el) {
+            el.classList.add('in');
+          });
+        } else {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry, idx) {
+                if (entry.isIntersecting) {
+                  entry.target.style.setProperty('--i', idx);
+                  entry.target.classList.add('in');
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
+          );
+          items.forEach(function (el) {
+            io.observe(el);
+          });
+        }
+
+        /* --- прогресс чтения --- */
+        var bar = document.getElementById('bar');
+        var ticking = false;
+        function updateBar() {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          var p = h > 0 ? Math.min(1, window.scrollY / h) : 0;
+          bar.style.width = (p * 100).toFixed(2) + '%';
+          ticking = false;
+        }
+        window.addEventListener(
+          'scroll',
+          function () {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(updateBar);
+            }
+          },
+          { passive: true }
+        );
+        updateBar();
+
+        /* --- переключатель падежей --- */
+        var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+        var panels = {
+          nom: document.getElementById('p-nom'),
+          acc: document.getElementById('p-acc'),
+          gen: document.getElementById('p-gen'),
+        };
+
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var key = tab.getAttribute('data-case');
+            tabs.forEach(function (t) {
+              t.setAttribute('aria-selected', String(t === tab));
+            });
+            Object.keys(panels).forEach(function (k) {
+              panels[k].classList.toggle('is-active', k === key);
+            });
+          });
+        });
+
+        /* --- переход по ссылкам --- */
+        var veil = document.getElementById('veil');
+        var navigating = false;
+        function go(url, x, y) {
+          if (navigating) return;
+          navigating = true;
+          if (reduce) {
+            window.location.href = url;
+            return;
+          }
+          veil.style.setProperty('--x', x + 'px');
+          veil.style.setProperty('--y', y + 'px');
+          document.body.classList.add('leaving');
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              veil.classList.add('on');
+            });
+          });
+          setTimeout(function () {
+            window.location.href = url;
+          }, 560);
+        }
+        document.querySelectorAll('a[href]').forEach(function (link) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            var cx = typeof e.clientX === 'number' && e.clientX ? e.clientX : window.innerWidth / 2;
+            var cy =
+              typeof e.clientY === 'number' && e.clientY ? e.clientY : window.innerHeight / 2;
+            go(link.getAttribute('href'), cx, cy);
+          });
+        });
+        window.addEventListener('pageshow', function (e) {
+          if (e.persisted) {
+            navigating = false;
+            veil.classList.remove('on');
+            document.body.classList.remove('leaving');
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
