@@ -23,9 +23,6 @@
       href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic/700.css"
     />
 
-    <!-- 1. ПОДКЛЮЧЕНИЕ БИБЛИОТЕКИ VK BRIDGE -->
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-
     <style>
       :root {
         --paper-1: #f8f2e6;
@@ -1472,31 +1469,6 @@
     <script>
       (function () {
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        /* --- 2. ИНИЦИАЛИЗАЦИЯ И НАСТРОЙКА VK BRIDGE --- */
-        if (typeof vkBridge !== 'undefined') {
-          vkBridge
-            .send('VKWebAppInit')
-            .then(function (data) {
-              if (data.result) {
-                console.log('VK Bridge успешно инициализирован (padezhi)');
-                vkBridge
-                  .send('VKWebAppSetViewSettings', {
-                    statusBarStyle: 'dark',
-                    actionBarColor: '#f8f2e6',
-                    navigationBarColor: '#f8f2e6',
-                  })
-                  .catch(function (error) {
-                    console.error('Ошибка настройки внешнего вида:', error);
-                  });
-              }
-            })
-            .catch(function (error) {
-              console.error('Ошибка инициализации VK Bridge:', error);
-            });
-        } else {
-          console.warn('VK Bridge не загружен. Приложение работает в режиме обычного сайта.');
-        }
 
         /* --- появление секций --- */
         var items = document.querySelectorAll('.reveal');
