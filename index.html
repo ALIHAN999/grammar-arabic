@@ -519,7 +519,7 @@
         }
       }
     </style>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js" defer></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   </head>
   <body>
     <div class="bg"></div>
@@ -670,6 +670,15 @@
     </div>
 
     <script>
+      vkBridge.send('VKWebAppInit')
+        .then((data) => {
+          if (data.result) {
+            console.log('VK Bridge успешно инициализирован');
+          }
+        })
+        .catch((error) => {
+          console.error('Ошибка инициализации VK Bridge:', error);
+        });
       (function () {
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
