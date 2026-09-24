@@ -11,11 +11,7 @@
       href="https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope/index.css"
     />
 
-    <!-- 1. ПОДКЛЮЧЕНИЕ БИБЛИОТЕКИ VK BRIDGE -->
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-
     <style>
-      /* ... (все стили остаются без изменений) ... */
       :root {
         --paper-1: #f8f2e6;
         --ink: #1d2b34;
@@ -676,31 +672,7 @@
       (function () {
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        /* --- ИНИЦИАЛИЗАЦИЯ VK BRIDGE --- */
-        if (typeof vkBridge !== 'undefined') {
-          vkBridge
-            .send('VKWebAppInit')
-            .then(function (data) {
-              if (data.result) {
-                console.log('VK Bridge инициализирован');
-                // Настраиваем внешний вид
-                vkBridge
-                  .send('VKWebAppSetViewSettings', {
-                    statusBarStyle: 'dark',
-                    actionBarColor: '#f8f2e6',
-                    navigationBarColor: '#f8f2e6',
-                  })
-                  .catch(function (e) {
-                    console.warn('ViewSettings error:', e);
-                  });
-              }
-            })
-            .catch(function (error) {
-              console.error('Ошибка инициализации VK Bridge:', error);
-            });
-        }
-
-        /* --- ЧАСТИЦЫ --- */
+        /* --- частицы --- */
         var field = document.getElementById('particles');
         if (!reduce && field) {
           var frag = document.createDocumentFragment();
@@ -719,7 +691,7 @@
           field.appendChild(frag);
         }
 
-        /* --- ПОЯВЛЕНИЕ --- */
+        /* --- появление --- */
         var items = document.querySelectorAll('.reveal');
         if (reduce || !('IntersectionObserver' in window)) {
           items.forEach(function (el) {
@@ -742,7 +714,7 @@
           });
         }
 
-        /* --- RIPPLE --- */
+        /* --- ripple --- */
         function ripple(card, x, y) {
           if (reduce) return;
           var rect = card.getBoundingClientRect();
@@ -758,55 +730,30 @@
           }, 640);
         }
 
-        /* --- НАВИГАЦИЯ ВНУТРИ ПРИЛОЖЕНИЯ (БЕЗ ВНЕШНЕГО БРАУЗЕРА) --- */
+        /* --- переход --- */
         var veil = document.getElementById('veil');
         var navigating = false;
 
-        function goInternal(url, x, y) {
+        function go(url, x, y) {
           if (navigating) return;
           navigating = true;
-
-          // Эффект перехода (визуальный)
-          if (!reduce) {
-            veil.style.setProperty('--x', x + 'px');
-            veil.style.setProperty('--y', y + 'px');
-            document.body.classList.add('leaving');
-            requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                veil.classList.add('on');
-              });
-            });
+          if (reduce) {
+            window.location.href = url;
+            return;
           }
-
-          // Используем VK Bridge для внутренней навигации вместо window.location
+          veil.style.setProperty('--x', x + 'px');
+          veil.style.setProperty('--y', y + 'px');
+          document.body.classList.add('leaving');
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              veil.classList.add('on');
+            });
+          });
           setTimeout(function () {
-            if (typeof vkBridge !== 'undefined') {
-              // VK Bridge способен обработать открытие ссылки внутри приложения
-              // Используем VKWebAppOpenURL с параметром, указывающим на внутренний переход
-              vkBridge
-                .send('VKWebAppOpenURL', {
-                  url: url,
-                  target: 'internal', // указывает, что ссылка должна открыться внутри
-                })
-                .then(function () {
-                  // Если нативный вызов сработал, сбрасываем состояние
-                  navigating = false;
-                  veil.classList.remove('on');
-                  document.body.classList.remove('leaving');
-                })
-                .catch(function () {
-                  // Если VKWebAppOpenURL не поддерживается, пробуем другой способ
-                  // или откатываемся к location (в крайнем случае)
-                  window.location.href = url;
-                });
-            } else {
-              // В обычном браузере просто переходим по ссылке
-              window.location.href = url;
-            }
-          }, reduce ? 0 : 560);
+            window.location.href = url;
+          }, 560);
         }
 
-        // Перехватываем все клики по карточкам
         document.querySelectorAll('.card').forEach(function (card) {
           card.addEventListener('click', function (e) {
             e.preventDefault();
@@ -814,11 +761,10 @@
             var cy =
               typeof e.clientY === 'number' && e.clientY ? e.clientY : window.innerHeight / 2;
             ripple(card, cx, cy);
-            goInternal(card.getAttribute('href'), cx, cy);
+            go(card.getAttribute('href'), cx, cy);
           });
         });
 
-        // Восстанавливаем состояние при возврате
         window.addEventListener('pageshow', function (e) {
           if (e.persisted) {
             navigating = false;
