@@ -22,1041 +22,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic/700.css"
     />
-
-    <style>
-      :root {
-        --paper-1: #f8f2e6;
-        --ink: #1d2b34;
-        --ink-soft: #3c4d57;
-        --muted: #7b8a92;
-        --gold: #a9762a;
-        --gold-lt: #d9ab5c;
-        --gold-dk: #7d5620;
-        --emerald: #1d9b73;
-        --emerald-lt: #66cfab;
-        --amber: #bf6c2c;
-        --bad: #c2504f;
-        --ar: #9a6420; /* цвет арабского текста */
-        --mudaf: #0f8f66; /* первое слово идафы */
-        --mudafilayhi: #bf6c2c; /* второе слово идафы */
-        --line: rgba(120, 92, 44, 0.16);
-        --r: 22px;
-        --shadow: 0 20px 44px -26px rgba(120, 92, 44, 0.6), 0 2px 8px -4px rgba(120, 92, 44, 0.22);
-        --maxw: 600px;
-      }
-
-      * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        font-family: 'Literata Variable', 'Literata', Georgia, serif;
-        font-size: clamp(16px, 4.3vw, 17.5px);
-        line-height: 1.95;
-        color: var(--ink);
-        background: var(--paper-1);
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      /* ---------- фон ---------- */
-      .bg {
-        position: fixed;
-        inset: 0;
-        z-index: -3;
-        background:
-          radial-gradient(120% 80% at 50% -12%, #fffefb 0%, #f9f7ee 38%, #f0ecdc 72%),
-          linear-gradient(180deg, #fffdf7, #f7f4e8 55%, #eff0e0);
-      }
-      .bg::after {
-        content: '';
-        position: absolute;
-        inset: -20%;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84'%3E%3Cg fill='none' stroke='%231d9b73' stroke-width='1'%3E%3Cpath d='M42 3 L51 33 L81 42 L51 51 L42 81 L33 51 L3 42 L33 33 Z'/%3E%3Crect x='16' y='16' width='52' height='52'/%3E%3Ccircle cx='42' cy='42' r='5.5'/%3E%3C/g%3E%3C/svg%3E");
-        background-size: 84px 84px;
-        opacity: 0.07;
-        animation: drift 70s linear infinite;
-      }
-      @keyframes drift {
-        to {
-          background-position: 336px 336px;
-        }
-      }
-      .orb {
-        position: fixed;
-        border-radius: 50%;
-        filter: blur(70px);
-        z-index: -2;
-        pointer-events: none;
-        opacity: 0.5;
-        mix-blend-mode: multiply;
-      }
-      .orb-a {
-        width: 330px;
-        height: 330px;
-        left: -140px;
-        top: -90px;
-        background: radial-gradient(circle, rgba(94, 214, 168, 0.5), transparent 68%);
-        animation: orbFloat 19s ease-in-out infinite;
-      }
-      .orb-b {
-        width: 380px;
-        height: 380px;
-        right: -170px;
-        top: 38%;
-        background: radial-gradient(circle, rgba(217, 171, 92, 0.45), transparent 68%);
-        animation: orbFloat 23s ease-in-out infinite reverse;
-      }
-      .vignette {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        background: radial-gradient(
-          95% 65% at 50% 40%,
-          transparent 44%,
-          rgba(150, 118, 62, 0.12) 100%
-        );
-      }
-      @keyframes orbFloat {
-        0%,
-        100% {
-          transform: translate3d(0, 0, 0) scale(1);
-        }
-        50% {
-          transform: translate3d(24px, -32px, 0) scale(1.1);
-        }
-      }
-
-      /* ---------- шапка ---------- */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 253, 247, 0.95),
-          rgba(255, 253, 247, 0.7) 70%,
-          rgba(255, 253, 247, 0)
-        );
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-      }
-      .back {
-        width: 42px;
-        height: 42px;
-        flex: none;
-        display: grid;
-        place-items: center;
-        text-decoration: none;
-        border-radius: 14px;
-        color: var(--gold-dk);
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid var(--line);
-        box-shadow: 0 6px 16px -10px rgba(120, 92, 44, 0.7);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          background 0.35s,
-          border-color 0.35s,
-          color 0.35s;
-      }
-      .back svg {
-        width: 19px;
-        height: 19px;
-      }
-      .back:hover {
-        background: var(--emerald);
-        border-color: var(--emerald);
-        color: #fffdf7;
-        transform: translateX(-3px);
-      }
-      .topbar-txt {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        line-height: 1.15;
-      }
-      .topbar-txt .t {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 16px;
-        letter-spacing: -0.01em;
-        color: var(--ink);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .topbar-txt .s {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        color: var(--emerald);
-        font-size: 14px;
-        font-weight: 700;
-        margin-top: 3px;
-        line-height: 1.9;
-      }
-      .progress {
-        position: sticky;
-        top: 0;
-        z-index: 41;
-        height: 2px;
-        margin-top: -2px;
-        background: rgba(120, 92, 44, 0.12);
-      }
-      .progress i {
-        display: block;
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, var(--mudaf), var(--gold) 55%, var(--mudafilayhi));
-        box-shadow: 0 0 10px rgba(29, 155, 115, 0.5);
-      }
-
-      /* ---------- макет ---------- */
-      main {
-        width: 100%;
-        max-width: var(--maxw);
-        margin: 0 auto;
-        padding: 14px 22px calc(env(safe-area-inset-bottom) + 70px);
-      }
-      section {
-        margin-bottom: 44px;
-      }
-
-      .eyebrow {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        letter-spacing: 0.34em;
-        text-transform: uppercase;
-        color: var(--emerald);
-        font-weight: 800;
-        margin: 0 0 14px;
-      }
-      h1 {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: clamp(32px, 9vw, 42px);
-        line-height: 1.08;
-        letter-spacing: -0.025em;
-        margin: 0;
-        color: var(--ink);
-      }
-      .ar-hero {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: center;
-        font-size: clamp(38px, 11vw, 50px);
-        font-weight: 700;
-        line-height: 2.2;
-        color: var(--emerald);
-        margin: 20px 0 0;
-      }
-      .lead {
-        margin: 22px 0 0;
-        color: var(--ink-soft);
-      }
-      h2 {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: clamp(21px, 5.6vw, 25px);
-        line-height: 1.25;
-        letter-spacing: -0.02em;
-        margin: 0 0 6px;
-        color: var(--ink);
-      }
-      .sec-head {
-        display: flex;
-        align-items: flex-start;
-        gap: 13px;
-        margin-bottom: 20px;
-      }
-      .sec-num {
-        font-family: 'Manrope Variable', sans-serif;
-        flex: none;
-        width: 34px;
-        height: 34px;
-        display: grid;
-        place-items: center;
-        border-radius: 11px;
-        font-size: 12.5px;
-        font-weight: 800;
-        color: #fffdf7;
-        margin-top: 4px;
-        background: linear-gradient(150deg, var(--emerald-lt), var(--emerald));
-        box-shadow: 0 8px 20px -12px rgba(29, 155, 115, 1);
-      }
-      .sec-sub {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.8;
-      }
-      p {
-        margin: 0 0 18px;
-      }
-      p:last-child {
-        margin-bottom: 0;
-      }
-      b {
-        color: var(--ink);
-      }
-
-      /* ---------- «воздух» для арабского ---------- */
-      .ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        unicode-bidi: isolate;
-        color: var(--ar);
-        font-size: 1.18em;
-        font-weight: 700;
-        line-height: 2.4;
-        padding-inline: 0.28em;
-        margin-inline: 0.34em;
-      }
-      .ar-term {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        unicode-bidi: isolate;
-        color: #04231a;
-        background: linear-gradient(140deg, #8ad9bd, var(--emerald-lt));
-        border: 1px solid rgba(29, 155, 115, 0.35);
-        border-radius: 8px;
-        padding: 0.06em 0.5em;
-        margin-inline: 0.42em;
-        font-size: 1.06em;
-        font-weight: 700;
-        line-height: 2.2;
-        white-space: nowrap;
-        box-shadow: 0 4px 12px -6px rgba(29, 155, 115, 0.9);
-      }
-      .ar-block {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        color: var(--ar);
-        font-size: clamp(22px, 6.1vw, 27px);
-        font-weight: 700;
-        line-height: 2.6;
-        word-spacing: 0.06em;
-        padding: 14px 4px 16px;
-      }
-      .translit {
-        font-family: 'Manrope Variable', sans-serif;
-        font-style: italic;
-        font-size: 14.5px;
-        color: var(--muted);
-        letter-spacing: 0.02em;
-        line-height: 1.7;
-        margin: 0;
-      }
-      .ru {
-        font-size: 16.5px;
-        color: var(--ink-soft);
-        line-height: 1.75;
-        margin: 0;
-      }
-
-      .w1 {
-        color: var(--mudaf);
-      }
-      .w2 {
-        color: var(--mudafilayhi);
-      }
-
-      .example {
-        border-radius: 18px;
-        padding: 6px 18px 16px;
-        background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.6));
-        border: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 11px;
-        box-shadow:
-          0 12px 28px -22px rgba(120, 92, 44, 0.8),
-          inset 0 1px 0 rgba(255, 255, 255, 1);
-      }
-      .example .tag {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 10.5px;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--muted);
-        font-weight: 800;
-        margin: 0;
-        padding-top: 12px;
-      }
-
-      /* ---------- схема: две части ---------- */
-      .diagram {
-        border-radius: var(--r);
-        padding: 20px 18px;
-        overflow: hidden;
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
-      }
-      .part {
-        border-radius: 16px;
-        padding: 14px 16px;
-        position: relative;
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          border-color 0.35s,
-          background 0.35s;
-      }
-      .part:hover {
-        transform: translateY(-3px);
-        border-color: color-mix(in srgb, var(--c) 58%, transparent);
-        background: color-mix(in srgb, var(--c) 6%, #fff);
-      }
-      .part .ar-name {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 2.2;
-        color: var(--c);
-      }
-      .part .ru-name {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 14px;
-        color: var(--ink);
-        letter-spacing: 0.01em;
-        margin-top: 2px;
-      }
-      .part .desc {
-        font-size: 14.5px;
-        line-height: 1.75;
-        color: var(--ink-soft);
-        margin: 8px 0 0;
-      }
-      .plus {
-        display: grid;
-        place-items: center;
-        height: 44px;
-        color: var(--gold);
-        opacity: 0.9;
-      }
-      .plus svg {
-        width: 26px;
-        height: 26px;
-        animation: plusPulse 3s ease-in-out infinite;
-      }
-      @keyframes plusPulse {
-        0%,
-        100% {
-          opacity: 0.45;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.12);
-        }
-      }
-      .eq {
-        display: grid;
-        place-items: center;
-        height: 40px;
-        color: var(--emerald);
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 11.5px;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-      }
-
-      /* ---------- трансформация ---------- */
-      .transform {
-        display: flex;
-        flex-direction: column;
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        box-shadow: var(--shadow);
-      }
-      .tline {
-        padding: 18px;
-        text-align: center;
-        position: relative;
-      }
-      .tline + .tline {
-        border-top: 1px solid rgba(120, 92, 44, 0.1);
-      }
-      .tline .lbl {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 10.5px;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--muted);
-        font-weight: 800;
-        display: block;
-        margin-bottom: 6px;
-      }
-      .tline .val {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: clamp(23px, 6.2vw, 28px);
-        line-height: 2.5;
-        font-weight: 700;
-        color: var(--ar);
-      }
-      .tline.before {
-        background: rgba(120, 92, 44, 0.05);
-      }
-      .tline.before .val {
-        opacity: 0.62;
-      }
-      .tline.before .cut {
-        color: var(--bad);
-        opacity: 0.95;
-      }
-      .tline.after {
-        background: radial-gradient(120% 100% at 50% 0%, rgba(29, 155, 115, 0.13), transparent 70%);
-      }
-      .arrow-down {
-        display: grid;
-        place-items: center;
-        height: 46px;
-        color: var(--emerald);
-        background: rgba(120, 92, 44, 0.05);
-      }
-      .arrow-down svg {
-        width: 24px;
-        height: 24px;
-        animation: bob 2.2s ease-in-out infinite;
-      }
-      @keyframes bob {
-        0%,
-        100% {
-          transform: translateY(-3px);
-          opacity: 0.55;
-        }
-        50% {
-          transform: translateY(3px);
-          opacity: 1;
-        }
-      }
-      .cut-note {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 13px;
-        color: var(--ink-soft);
-        line-height: 1.75;
-        margin: 14px 2px 0;
-      }
-
-      /* ---------- конструктор ---------- */
-      .builder {
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        box-shadow: var(--shadow);
-      }
-      .b-col {
-        padding: 18px 18px 6px;
-      }
-      .b-col + .b-col {
-        border-top: 1px solid rgba(120, 92, 44, 0.1);
-      }
-      .b-label {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        font-weight: 800;
-        color: var(--c);
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin: 0 0 12px;
-        flex-wrap: wrap;
-      }
-      .b-label em {
-        font-style: normal;
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 0;
-        text-transform: none;
-        color: var(--c);
-        opacity: 0.95;
-        line-height: 2;
-      }
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .chip {
-        font-family: inherit;
-        cursor: pointer;
-        border-radius: 14px;
-        padding: 8px 13px 6px;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid var(--line);
-        color: var(--ink-soft);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1px;
-        line-height: 1;
-        box-shadow: 0 6px 16px -14px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-          background 0.3s,
-          border-color 0.3s,
-          color 0.3s;
-      }
-      .chip .ca {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 19px;
-        font-weight: 700;
-        line-height: 2.1;
-        color: var(--ar);
-      }
-      .chip .cr {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        color: var(--muted);
-        font-weight: 600;
-        line-height: 1.5;
-      }
-      .chip:hover {
-        transform: translateY(-3px);
-        border-color: color-mix(in srgb, var(--c) 45%, transparent);
-        background: color-mix(in srgb, var(--c) 6%, #fff);
-      }
-      .chip[aria-pressed='true'] {
-        background: color-mix(in srgb, var(--c) 12%, #fff);
-        border-color: color-mix(in srgb, var(--c) 55%, transparent);
-        box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--c) 95%, transparent);
-      }
-      .chip[aria-pressed='true'] .ca {
-        color: var(--c);
-      }
-      .chip[aria-pressed='true'] .cr {
-        color: var(--ink-soft);
-      }
-
-      .result {
-        padding: 20px 18px 24px;
-        background: rgba(120, 92, 44, 0.05);
-        border-top: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .res-ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: center;
-        font-size: clamp(28px, 8vw, 36px);
-        font-weight: 700;
-        line-height: 2.6;
-        word-spacing: 0.08em;
-        margin: 0;
-      }
-      .res-ar span {
-        display: inline-block;
-      }
-      .flash {
-        animation: flashIn 0.55s cubic-bezier(0.19, 0.85, 0.24, 1);
-      }
-      @keyframes flashIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px) scale(0.97);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      .res-meta {
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-      }
-
-      /* ---------- правила ---------- */
-      .rules {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-      .rule {
-        position: relative;
-        border-radius: var(--r);
-        padding: 18px;
-        overflow: hidden;
-        background: linear-gradient(155deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        border: 1px solid color-mix(in srgb, var(--c) 24%, transparent);
-        box-shadow: var(--shadow);
-        transition:
-          transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-          border-color 0.4s;
-      }
-      .rule:hover {
-        transform: translateY(-3px);
-        border-color: color-mix(in srgb, var(--c) 50%, transparent);
-      }
-      .rule::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: linear-gradient(180deg, transparent, var(--c), transparent);
-      }
-      .rule-h {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 10px;
-      }
-      .rule-n {
-        font-family: 'Manrope Variable', sans-serif;
-        flex: none;
-        width: 30px;
-        height: 30px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        font-size: 12.5px;
-        font-weight: 800;
-        color: var(--c);
-        background: color-mix(in srgb, var(--c) 12%, #fff);
-        border: 1px solid color-mix(in srgb, var(--c) 38%, transparent);
-      }
-      .rule-t {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 16.5px;
-        letter-spacing: -0.01em;
-        line-height: 1.4;
-        color: var(--ink);
-      }
-      .rule p {
-        margin: 0;
-        font-size: 15.5px;
-        line-height: 1.85;
-        color: var(--ink-soft);
-      }
-      .rule .demo-line {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 22px;
-        font-weight: 700;
-        line-height: 2.4;
-        margin: 12px 0 0;
-        color: var(--ar);
-      }
-
-      /* ---------- значения идафы ---------- */
-      .uses {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .use {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 16px 18px;
-        border-radius: 18px;
-        background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.65));
-        border: 1px solid var(--line);
-        box-shadow: 0 10px 26px -22px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s,
-          border-color 0.35s;
-      }
-      .use:hover {
-        transform: translateY(-3px);
-        border-color: rgba(29, 155, 115, 0.4);
-      }
-      .use .u-t {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 13px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--emerald);
-      }
-      .use .u-ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 23px;
-        font-weight: 700;
-        line-height: 2.4;
-        color: var(--ar);
-      }
-      .use .u-ru {
-        font-size: 15.5px;
-        line-height: 1.8;
-        color: var(--ink-soft);
-        margin: 0;
-      }
-
-      /* ---------- местоименные суффиксы ---------- */
-      .sfx {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .sf {
-        border-radius: 16px;
-        padding: 13px 10px;
-        text-align: center;
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62));
-        border: 1px solid var(--line);
-        box-shadow: 0 10px 24px -20px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s,
-          border-color 0.35s,
-          background 0.35s;
-      }
-      .sf:hover {
-        transform: translateY(-3px);
-        background: color-mix(in srgb, var(--emerald) 8%, #fff);
-        border-color: color-mix(in srgb, var(--emerald) 42%, transparent);
-      }
-      .sf .a {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 23px;
-        font-weight: 700;
-        line-height: 2.2;
-        color: var(--ar);
-      }
-      .sf .a i {
-        font-style: normal;
-        color: var(--emerald);
-      }
-      .sf .r {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 12.5px;
-        color: var(--muted);
-        font-weight: 600;
-        line-height: 1.5;
-      }
-
-      /* ---------- ошибки ---------- */
-      .mistakes {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .mk {
-        border-radius: 18px;
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.72));
-        box-shadow: 0 10px 26px -22px rgba(120, 92, 44, 0.9);
-      }
-      .mk-row {
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 15px;
-      }
-      .mk-row + .mk-row {
-        border-top: 1px dashed rgba(120, 92, 44, 0.22);
-      }
-      .mk-row .sign {
-        width: 26px;
-        height: 26px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 14px;
-      }
-      .mk-row.no .sign {
-        color: #fffdf7;
-        background: var(--bad);
-        box-shadow: 0 6px 14px -8px rgba(194, 80, 79, 1);
-      }
-      .mk-row.yes .sign {
-        color: #fffdf7;
-        background: var(--emerald);
-        box-shadow: 0 6px 14px -8px rgba(29, 155, 115, 1);
-      }
-      .mk-row .val {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 21px;
-        font-weight: 700;
-        line-height: 2.3;
-      }
-      .mk-row.no .val {
-        color: #b07573;
-        text-decoration: line-through;
-        text-decoration-color: rgba(194, 80, 79, 0.6);
-      }
-      .mk-row.yes .val {
-        color: var(--mudaf);
-      }
-      .mk-note {
-        padding: 0 15px 14px;
-        font-size: 14.5px;
-        line-height: 1.75;
-        color: var(--muted);
-        margin: 0;
-      }
-
-      /* ---------- кнопка ---------- */
-      .menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 15.5px;
-        text-decoration: none;
-        color: #fffdf7;
-        padding: 16px 22px;
-        border-radius: 20px;
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(140deg, var(--emerald-lt), var(--emerald) 60%, #14805e);
-        border: 1px solid rgba(15, 120, 86, 0.3);
-        box-shadow: 0 18px 36px -18px rgba(29, 155, 115, 0.9);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          box-shadow 0.35s;
-      }
-      .menu-btn::after {
-        content: '';
-        position: absolute;
-        top: -60%;
-        left: -70%;
-        width: 48%;
-        height: 220%;
-        background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-        transform: rotate(14deg);
-        transition: transform 0.8s cubic-bezier(0.3, 0.8, 0.2, 1);
-      }
-      .menu-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 24px 44px -18px rgba(29, 155, 115, 1);
-      }
-      .menu-btn:hover::after {
-        transform: rotate(14deg) translateX(440%);
-      }
-      .menu-btn:active {
-        transform: scale(0.985);
-      }
-      .menu-btn svg {
-        width: 18px;
-        height: 18px;
-      }
-
-      /* ---------- появление ---------- */
-      .reveal {
-        opacity: 0;
-        transform: translateY(26px);
-      }
-      .reveal.in {
-        animation: rise 0.85s cubic-bezier(0.19, 0.85, 0.24, 1) forwards;
-        animation-delay: calc(var(--i, 0) * 90ms);
-      }
-      @keyframes rise {
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* ---------- переход ---------- */
-      .veil {
-        position: fixed;
-        inset: 0;
-        z-index: 90;
-        pointer-events: none;
-        display: grid;
-        place-items: center;
-        background: radial-gradient(
-          circle at var(--x, 50%) var(--y, 50%),
-          rgba(255, 253, 247, 0.98) 0%,
-          rgba(102, 207, 171, 0.92) 30%,
-          rgba(29, 155, 115, 0.96) 66%
-        );
-        clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
-        transition: clip-path 0.58s cubic-bezier(0.65, 0, 0.15, 1);
-      }
-      .veil.on {
-        clip-path: circle(160vmax at var(--x, 50%) var(--y, 50%));
-      }
-      .veil-mark {
-        width: 96px;
-        height: 96px;
-        opacity: 0;
-        transform: scale(0.55) rotate(-40deg);
-        color: #fffdf7;
-        transition:
-          opacity 0.4s 0.18s,
-          transform 0.6s 0.18s cubic-bezier(0.2, 0.9, 0.2, 1);
-      }
-      .veil.on .veil-mark {
-        opacity: 0.95;
-        transform: scale(1) rotate(0);
-      }
-      .veil-mark svg {
-        width: 100%;
-        height: 100%;
-        animation: spin 9s linear infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      body.leaving main {
-        animation: fadeOut 0.42s ease forwards;
-      }
-      @keyframes fadeOut {
-        to {
-          opacity: 0.2;
-          transform: scale(0.99);
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          animation: none !important;
-          transition: none !important;
-        }
-        .reveal {
-          opacity: 1;
-          transform: none;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/idafa.css" />
   </head>
   <body>
     <div class="bg"></div>
@@ -1090,8 +56,8 @@
         <h1>Идафа</h1>
         <div class="ar-hero" lang="ar" dir="rtl">الإِضَافَة</div>
         <p class="lead">
-          Как сказать «книга студента» или «дверь дома» по-арабски — без предлогов и без слова
-          «принадлежит». Разбираем самую частую конструкцию языка.
+          Как сказать «книга студента» или&nbsp;«дверь дома» по-арабски — без&nbsp;предлогов
+          и&nbsp;без&nbsp;слова «принадлежит». Разбираем самую частую конструкцию языка.
         </p>
       </section>
 
@@ -1101,20 +67,20 @@
           <span class="sec-num">1</span>
           <div>
             <h2>Что такое идафа</h2>
-            <p class="sec-sub">Два существительных рядом — и уже смысл</p>
+            <p class="sec-sub">Два существительных рядом — и&nbsp;уже&nbsp;смысл</p>
           </div>
         </div>
 
         <p>
-          В русском, чтобы связать два предмета, мы меняем окончание: «книга
-          <b>кого? чего?</b> студента». В арабском для этого просто ставят два существительных рядом
-          — в строгом порядке и с нужными огласовками.
+          В русском, чтобы связать два предмета, мы&nbsp;меняем окончание: «книга
+          <b>кого? чего?</b> студента». В&nbsp;арабском для&nbsp;этого просто ставят два
+          существительных рядом — в&nbsp;строгом порядке и&nbsp;с&nbsp;нужными огласовками.
         </p>
         <p>
           Такая связка называется
           <span class="ar-term" lang="ar" dir="rtl">الإِضَافَة</span>
-          — «идафа», то есть «присоединение». Она всегда означает принадлежность, часть целого,
-          материал или место.
+          — «идафа», то&nbsp;есть «присоединение». Она всегда означает принадлежность, часть целого,
+          материал или&nbsp;место.
         </p>
 
         <div class="example">
@@ -1122,8 +88,8 @@
           <p class="ar-block" lang="ar" dir="rtl">
             <span class="w1">كِتَابُ</span> <span class="w2">الطَّالِبِ</span>
           </p>
-          <p class="translit">китабу т-талиби</p>
-          <p class="ru">«книга студента»</p>
+
+          <p class="ru">«Книга студента»</p>
         </div>
       </section>
 
@@ -1133,7 +99,7 @@
           <span class="sec-num">2</span>
           <div>
             <h2>Две части конструкции</h2>
-            <p class="sec-sub">У каждой — своё имя и своя роль</p>
+            <p class="sec-sub">У каждой — своё имя и&nbsp;своя роль</p>
           </div>
         </div>
 
@@ -1142,8 +108,8 @@
             <p class="ar-name" lang="ar" dir="rtl">المُضَاف</p>
             <p class="ru-name">Мудаф — первое слово</p>
             <p class="desc">
-              То, <b>что принадлежит</b>: книга, дверь, машина. Стоит первым и получает огласовку в
-              зависимости от своей роли в предложении.
+              То, <b>что принадлежит</b>: книга, дверь, машина. Стоит первым и&nbsp;получает
+              огласовку в&nbsp;зависимости отсвоей роли в&nbsp;предложении.
             </p>
           </div>
 
@@ -1165,17 +131,16 @@
             <p class="ar-name" lang="ar" dir="rtl">المُضَاف إِلَيْهِ</p>
             <p class="ru-name">Мудаф илейхи — второе слово</p>
             <p class="desc">
-              <b>Владелец</b>: студент, дом, директор. Всегда стоит вторым и всегда — в родительном
-              падеже.
+              <b>Владелец</b>: студент, дом, директор. Всегда стоит вторым и&nbsp;всегда —
+              в&nbsp;родительном падеже.
             </p>
           </div>
 
-          <div class="eq">порядок не меняется</div>
+          <div class="eq">порядок не&nbsp;меняется</div>
 
           <p class="ar-block" lang="ar" dir="rtl" style="text-align: center; padding-top: 4px">
-            <span class="w1">سَيَّارَةُ</span> <span class="w2">المُدِيرِ</span>
+            <span class="w1 sayar">سَيَّارَةُ</span> <span class="w2 sayar">المُدِيرِ</span>
           </p>
-          <p class="translit" style="text-align: center">сайярату ль-мудир</p>
           <p class="ru" style="text-align: center">«машина директора»</p>
         </div>
       </section>
@@ -1185,7 +150,7 @@
         <div class="sec-head">
           <span class="sec-num">3</span>
           <div>
-            <h2>Что происходит со словами</h2>
+            <h2>Что происходит со&nbsp;словами</h2>
             <p class="sec-sub">Смотрим, как два отдельных слова становятся идафой</p>
           </div>
         </div>
@@ -1221,7 +186,7 @@
         <p class="cut-note">
           У первого слова исчез танвин
           <span class="ar" lang="ar" dir="rtl">ـٌ</span> — вместо него одна огласовка, потому что
-          теперь слово «не само по себе». У второго слова появилась касра
+          теперь слово «не&nbsp;само&nbsp;по&nbsp;себе». У&nbsp;второго слова появилась касра
           <span class="ar" lang="ar" dir="rtl">ـِ</span> — родительный падеж.
         </p>
       </section>
@@ -1232,7 +197,7 @@
           <span class="sec-num">4</span>
           <div>
             <h2>Соберите идафу</h2>
-            <p class="sec-sub">Выберите слово и владельца — форма построится сама</p>
+            <p class="sec-sub">Выберите слово и&nbsp;владельца — форма построится сама</p>
           </div>
         </div>
 
@@ -1334,7 +299,6 @@
               <span class="w1">كِتَابُ</span> <span class="w2">الطَّالِبِ</span>
             </p>
             <div class="res-meta">
-              <p class="translit" id="resTr">китабу т-талиби</p>
               <p class="ru" id="resRu">«книга студента»</p>
             </div>
           </div>
@@ -1354,11 +318,12 @@
         <div class="rules">
           <div class="rule" style="--c: var(--mudaf)">
             <div class="rule-h">
-              <span class="rule-n">1</span><span class="rule-t">Первое слово — без артикля</span>
+              <span class="rule-n">1</span
+              ><span class="rule-t">Первое слово — без&nbsp;артикля</span>
             </div>
             <p>
-              У мудафа никогда не бывает <span class="ar" lang="ar" dir="rtl">ال</span>, потому что
-              определённым его делает второе слово.
+              У мудафа никогда не&nbsp;бывает <span class="ar" lang="ar" dir="rtl">ال</span>, потому
+              что определённым его делает второе слово.
             </p>
             <p class="demo-line" lang="ar" dir="rtl">
               <span class="w1">كِتَابُ</span> <span class="w2">الطَّالِبِ</span>
@@ -1367,13 +332,14 @@
 
           <div class="rule" style="--c: var(--mudaf)">
             <div class="rule-h">
-              <span class="rule-n">2</span><span class="rule-t">Первое слово — без танвина</span>
+              <span class="rule-n">2</span
+              ><span class="rule-t">Первое слово — без&nbsp;танвина</span>
             </div>
             <p>
               Танвин
-              <span class="ar" lang="ar" dir="rtl">ـٌ ـً ـٍ</span>
-              означает «какой-то неопределённый». В идафе слово уже конкретное, поэтому остаётся
-              одна огласовка.
+              <span class="ar" lang="ar" dir="rtl">&nbsp; ـٌ &nbsp;ـً &nbsp;ـٍ &nbsp;</span>
+              означает «какой-то неопределённый». В&nbsp;идафе слово уже&nbsp;конкретное, поэтому
+              остаётся одинарная огласовка.
             </p>
           </div>
 
@@ -1383,13 +349,14 @@
               ><span class="rule-t">Второе слово — всегда родительный</span>
             </div>
             <p>
-              Мудаф илейхи получает касру <span class="ar" lang="ar" dir="rtl">ـِ</span>, а если оно
-              без артикля — танвин-касру <span class="ar" lang="ar" dir="rtl">ـٍ</span>.
+              Мудаф илейхи получает касру <span class="ar" lang="ar" dir="rtl">ـِ</span>,
+              &nbsp;а&nbsp;если оно без&nbsp;артикля — танвин-касру
+              <span class="ar" lang="ar" dir="rtl">ـٍ</span>.
             </p>
             <p class="demo-line" lang="ar" dir="rtl">
               <span class="w1">خَاتَمُ</span> <span class="w2">ذَهَبٍ</span>
             </p>
-            <p class="translit" style="margin-top: 8px">хатаму захабин · «золотое кольцо»</p>
+            <p class="translit" style="margin-top: 8px">«Золотое кольцо»</p>
           </div>
 
           <div class="rule" style="--c: var(--gold)">
@@ -1397,8 +364,8 @@
               <span class="rule-n">4</span><span class="rule-t">Порядок слов фиксированный</span>
             </div>
             <p>
-              Сначала — что принадлежит, потом — владелец. Поменять их местами нельзя: смысл станет
-              другим.
+              Сначала — что принадлежит, потом — владелец. Поменять их&nbsp;местами нельзя: смысл
+              станет другим.
             </p>
           </div>
         </div>
@@ -1420,21 +387,21 @@
             <p class="u-ar" lang="ar" dir="rtl">
               <span class="w1">قَلَمُ</span> <span class="w2">المُدِيرِ</span>
             </p>
-            <p class="u-ru">«ручка директора» — предмет кому-то принадлежит.</p>
+            <p class="u-ru">«Ручка директора» — предмет кому-то принадлежит.</p>
           </div>
           <div class="use">
             <span class="u-t">Часть целого</span>
             <p class="u-ar" lang="ar" dir="rtl">
               <span class="w1">بَابُ</span> <span class="w2">البَيْتِ</span>
             </p>
-            <p class="u-ru">«дверь дома» — часть чего-то большего.</p>
+            <p class="u-ru">«Дверь дома» — часть чего-то большего.</p>
           </div>
           <div class="use">
             <span class="u-t">Материал</span>
             <p class="u-ar" lang="ar" dir="rtl">
               <span class="w1">خَاتَمُ</span> <span class="w2">ذَهَبٍ</span>
             </p>
-            <p class="u-ru">«золотое кольцо» — из чего сделано.</p>
+            <p class="u-ru">«Золотое кольцо» — из чего сделано.</p>
           </div>
         </div>
       </section>
@@ -1444,40 +411,40 @@
         <div class="sec-head">
           <span class="sec-num">7</span>
           <div>
-            <h2>Идафа с местоимением</h2>
+            <h2>Идафа с&nbsp;местоимением</h2>
             <p class="sec-sub">Владельцем может быть суффикс вместо слова</p>
           </div>
         </div>
 
         <p>
-          Если присоединить к слову местоименный суффикс, получится та же идафа — просто второе
-          «слово» приросло к первому:
+          Если присоединить к&nbsp;слову местоименный суффикс, получится та&nbsp;же идафа — просто
+          второе «слово» приросло к первому:
         </p>
 
         <div class="sfx">
           <div class="sf">
-            <p class="a" lang="ar" dir="rtl">كِتَاب<i>ي</i></p>
+            <p class="a kitab" lang="ar" dir="rtl">كِتَاب<i>ي</i></p>
             <p class="r">моя книга</p>
           </div>
           <div class="sf">
-            <p class="a" lang="ar" dir="rtl">كِتَاب<i>كَ</i></p>
+            <p class="a kitab" lang="ar" dir="rtl">كِتَاب<i>كَ</i></p>
             <p class="r">твоя книга</p>
           </div>
           <div class="sf">
-            <p class="a" lang="ar" dir="rtl">كِتَاب<i>هُ</i></p>
+            <p class="a kitab" lang="ar" dir="rtl">كِتَاب<i>هُ</i></p>
             <p class="r">его книга</p>
           </div>
           <div class="sf">
-            <p class="a" lang="ar" dir="rtl">كِتَاب<i>هَا</i></p>
+            <p class="a kitab" lang="ar" dir="rtl">كِتَاب<i>هَا</i></p>
             <p class="r">её книга</p>
           </div>
         </div>
 
         <p style="margin-top: 20px">
-          Правило то же: первое слово без артикля и без танвина, а падеж всей конструкции
-          определяется ролью слова
+          Правило то же: первое слово без&nbsp;артикля и&nbsp;без&nbsp;танвина, а&nbsp;падеж всей
+          конструкции определяется ролью слова
           <span class="ar" lang="ar" dir="rtl">كِتَاب</span>
-          в предложении.
+          в&nbsp;предложении.
         </p>
       </section>
 
@@ -1502,7 +469,7 @@
               ><span class="val" lang="ar" dir="rtl">كِتَابُ الطَّالِبِ</span>
             </div>
             <p class="mk-note">
-              У мудафа не может быть танвина — он исчезает, как только слово входит в идафу.
+              У мудафа не&nbsp;может быть танвина — он исчезает, как только слово входит в идафу.
             </p>
           </div>
 
@@ -1516,7 +483,8 @@
               ><span class="val" lang="ar" dir="rtl">كِتَابُ الطَّالِبِ</span>
             </div>
             <p class="mk-note">
-              Артикль у первого слова тоже не ставится: определённость приходит от второго слова.
+              Артикль у&nbsp;первого слова тоже не&nbsp;ставится: определённость приходит
+              от&nbsp;второго слова.
             </p>
           </div>
 
@@ -1530,7 +498,7 @@
               ><span class="val" lang="ar" dir="rtl">كِتَابُ الطَّالِبِ</span>
             </div>
             <p class="mk-note">
-              Мудаф илейхи всегда в родительном падеже — только касра, никогда не дамма.
+              Мудаф илейхи всегда в&nbsp;родительном падеже — только касра, никогда не&nbsp;дамма.
             </p>
           </div>
         </div>
@@ -1616,7 +584,6 @@
         var groupA = document.getElementById('groupA');
         var groupB = document.getElementById('groupB');
         var resAr = document.getElementById('resAr');
-        var resTr = document.getElementById('resTr');
         var resRu = document.getElementById('resRu');
 
         function picked(group) {
@@ -1633,7 +600,6 @@
             '</span> <span class="w2">' +
             b.dataset.ar +
             '</span>';
-          resTr.textContent = a.dataset.tr + ' ' + b.dataset.tr;
           resRu.textContent = '«' + a.dataset.ru + ' ' + b.dataset.ru + '»';
           if (!reduce) {
             resAr.classList.remove('flash');
