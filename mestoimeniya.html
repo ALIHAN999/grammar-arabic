@@ -22,1021 +22,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic/700.css"
     />
-
-    <style>
-      :root {
-        --paper-1: #f8f2e6;
-        --ink: #1d2b34;
-        --ink-soft: #3c4d57;
-        --muted: #7b8a92;
-        --gold: #a9762a;
-        --gold-lt: #d9ab5c;
-        --gold-dk: #7d5620;
-        --azure: #2b6fc4;
-        --azure-lt: #6fa8e8;
-        --azure-dk: #1d5196;
-        --emerald: #0f8f66;
-        --emerald-lt: #5ec79f;
-        --amber: #bf6c2c;
-        --bad: #c2504f;
-        --ar: #9a6420; /* цвет арабского текста */
-        --pro: #2b6fc4; /* отдельные местоимения */
-        --sfx: #0f8f66; /* суффиксы */
-        --line: rgba(120, 92, 44, 0.16);
-        --r: 22px;
-        --shadow: 0 20px 44px -26px rgba(120, 92, 44, 0.6), 0 2px 8px -4px rgba(120, 92, 44, 0.22);
-        --maxw: 600px;
-      }
-
-      * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        font-family: 'Literata Variable', 'Literata', Georgia, serif;
-        font-size: clamp(16px, 4.3vw, 17.5px);
-        line-height: 1.95;
-        color: var(--ink);
-        background: var(--paper-1);
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      /* ---------- фон ---------- */
-      .bg {
-        position: fixed;
-        inset: 0;
-        z-index: -3;
-        background:
-          radial-gradient(120% 80% at 50% -12%, #fffefb 0%, #f9f7f0 38%, #eff1ec 72%),
-          linear-gradient(180deg, #fffdf7, #f7f4ea 55%, #eef0e4);
-      }
-      .bg::after {
-        content: '';
-        position: absolute;
-        inset: -20%;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84'%3E%3Cg fill='none' stroke='%232b6fc4' stroke-width='1'%3E%3Cpath d='M42 3 L51 33 L81 42 L51 51 L42 81 L33 51 L3 42 L33 33 Z'/%3E%3Crect x='16' y='16' width='52' height='52'/%3E%3Ccircle cx='42' cy='42' r='5.5'/%3E%3C/g%3E%3C/svg%3E");
-        background-size: 84px 84px;
-        opacity: 0.065;
-        animation: drift 70s linear infinite;
-      }
-      @keyframes drift {
-        to {
-          background-position: 336px 336px;
-        }
-      }
-      .orb {
-        position: fixed;
-        border-radius: 50%;
-        filter: blur(70px);
-        z-index: -2;
-        pointer-events: none;
-        opacity: 0.45;
-        mix-blend-mode: multiply;
-      }
-      .orb-a {
-        width: 330px;
-        height: 330px;
-        left: -140px;
-        top: -90px;
-        background: radial-gradient(circle, rgba(111, 168, 232, 0.5), transparent 68%);
-        animation: orbFloat 19s ease-in-out infinite;
-      }
-      .orb-b {
-        width: 380px;
-        height: 380px;
-        right: -170px;
-        top: 38%;
-        background: radial-gradient(circle, rgba(217, 171, 92, 0.45), transparent 68%);
-        animation: orbFloat 23s ease-in-out infinite reverse;
-      }
-      .vignette {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        background: radial-gradient(
-          95% 65% at 50% 40%,
-          transparent 44%,
-          rgba(150, 118, 62, 0.12) 100%
-        );
-      }
-      @keyframes orbFloat {
-        0%,
-        100% {
-          transform: translate3d(0, 0, 0) scale(1);
-        }
-        50% {
-          transform: translate3d(24px, -32px, 0) scale(1.1);
-        }
-      }
-
-      /* ---------- шапка ---------- */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 253, 247, 0.95),
-          rgba(255, 253, 247, 0.7) 70%,
-          rgba(255, 253, 247, 0)
-        );
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-      }
-      .back {
-        width: 42px;
-        height: 42px;
-        flex: none;
-        display: grid;
-        place-items: center;
-        text-decoration: none;
-        border-radius: 14px;
-        color: var(--gold-dk);
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid var(--line);
-        box-shadow: 0 6px 16px -10px rgba(120, 92, 44, 0.7);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          background 0.35s,
-          border-color 0.35s,
-          color 0.35s;
-      }
-      .back svg {
-        width: 19px;
-        height: 19px;
-      }
-      .back:hover {
-        background: var(--azure);
-        border-color: var(--azure-dk);
-        color: #fffdf7;
-        transform: translateX(-3px);
-      }
-      .topbar-txt {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        line-height: 1.15;
-      }
-      .topbar-txt .t {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 16px;
-        letter-spacing: -0.01em;
-        color: var(--ink);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .topbar-txt .s {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        color: var(--azure);
-        font-size: 14px;
-        font-weight: 700;
-        margin-top: 3px;
-        line-height: 1.9;
-      }
-      .progress {
-        position: sticky;
-        top: 0;
-        z-index: 41;
-        height: 2px;
-        margin-top: -2px;
-        background: rgba(120, 92, 44, 0.12);
-      }
-      .progress i {
-        display: block;
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, var(--pro), var(--gold) 55%, var(--sfx));
-        box-shadow: 0 0 10px rgba(43, 111, 196, 0.45);
-      }
-
-      /* ---------- макет ---------- */
-      main {
-        width: 100%;
-        max-width: var(--maxw);
-        margin: 0 auto;
-        padding: 14px 22px calc(env(safe-area-inset-bottom) + 70px);
-      }
-      section {
-        margin-bottom: 44px;
-      }
-
-      .eyebrow {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        letter-spacing: 0.34em;
-        text-transform: uppercase;
-        color: var(--azure);
-        font-weight: 800;
-        margin: 0 0 14px;
-      }
-      h1 {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: clamp(31px, 8.6vw, 42px);
-        line-height: 1.08;
-        letter-spacing: -0.025em;
-        margin: 0;
-        color: var(--ink);
-      }
-      .ar-hero {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: center;
-        font-size: clamp(36px, 10.5vw, 48px);
-        font-weight: 700;
-        line-height: 2.2;
-        color: var(--azure);
-        margin: 20px 0 0;
-      }
-      .lead {
-        margin: 22px 0 0;
-        color: var(--ink-soft);
-      }
-      h2 {
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: clamp(21px, 5.6vw, 25px);
-        line-height: 1.25;
-        letter-spacing: -0.02em;
-        margin: 0 0 6px;
-        color: var(--ink);
-      }
-      .sec-head {
-        display: flex;
-        align-items: flex-start;
-        gap: 13px;
-        margin-bottom: 20px;
-      }
-      .sec-num {
-        font-family: 'Manrope Variable', sans-serif;
-        flex: none;
-        width: 34px;
-        height: 34px;
-        display: grid;
-        place-items: center;
-        border-radius: 11px;
-        font-size: 12.5px;
-        font-weight: 800;
-        color: #fffdf7;
-        margin-top: 4px;
-        background: linear-gradient(150deg, var(--azure-lt), var(--azure));
-        box-shadow: 0 8px 20px -12px rgba(43, 111, 196, 1);
-      }
-      .sec-sub {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.8;
-      }
-      p {
-        margin: 0 0 18px;
-      }
-      p:last-child {
-        margin-bottom: 0;
-      }
-      b {
-        color: var(--ink);
-      }
-
-      /* ---------- «воздух» для арабского ---------- */
-      .ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        unicode-bidi: isolate;
-        color: var(--ar);
-        font-size: 1.18em;
-        font-weight: 700;
-        line-height: 2.4;
-        padding-inline: 0.28em;
-        margin-inline: 0.34em;
-      }
-      .ar-term {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        unicode-bidi: isolate;
-        color: #08152a;
-        background: linear-gradient(140deg, #9cc5f2, var(--azure-lt));
-        border: 1px solid rgba(43, 111, 196, 0.35);
-        border-radius: 8px;
-        padding: 0.06em 0.5em;
-        margin-inline: 0.42em;
-        font-size: 1.06em;
-        font-weight: 700;
-        line-height: 2.2;
-        white-space: nowrap;
-        box-shadow: 0 4px 12px -6px rgba(43, 111, 196, 0.9);
-      }
-      .ar-block {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        color: var(--ar);
-        font-size: clamp(22px, 6.1vw, 27px);
-        font-weight: 700;
-        line-height: 2.6;
-        word-spacing: 0.06em;
-        padding: 14px 4px 16px;
-      }
-      .translit {
-        font-family: 'Manrope Variable', sans-serif;
-        font-style: italic;
-        font-size: 14.5px;
-        color: var(--muted);
-        letter-spacing: 0.02em;
-        line-height: 1.7;
-        margin: 0;
-      }
-      .ru {
-        font-size: 16.5px;
-        color: var(--ink-soft);
-        line-height: 1.75;
-        margin: 0;
-      }
-      .hl-pro {
-        color: var(--pro);
-      }
-      .hl-sfx {
-        color: var(--sfx);
-      }
-      .hl-gold {
-        color: var(--gold);
-      }
-
-      .example {
-        border-radius: 18px;
-        padding: 6px 18px 16px;
-        background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.6));
-        border: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 11px;
-        box-shadow:
-          0 12px 28px -22px rgba(120, 92, 44, 0.8),
-          inset 0 1px 0 rgba(255, 255, 255, 1);
-      }
-      .example .tag {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 10.5px;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--muted);
-        font-weight: 800;
-        margin: 0;
-        padding-top: 12px;
-      }
-
-      /* ---------- табы ---------- */
-      .tabs-wrap {
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        box-shadow: var(--shadow);
-      }
-      .tabs {
-        display: flex;
-        gap: 6px;
-        padding: 8px;
-        background: rgba(120, 92, 44, 0.07);
-        border-bottom: 1px solid var(--line);
-      }
-      .tab {
-        flex: 1;
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 12px;
-        letter-spacing: 0.01em;
-        color: var(--muted);
-        background: transparent;
-        border: 1px solid transparent;
-        border-radius: 13px;
-        padding: 10px 4px;
-        cursor: pointer;
-        transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
-      .tab:hover {
-        color: var(--ink);
-        background: rgba(255, 255, 255, 0.75);
-      }
-      .tab[aria-selected='true'] {
-        color: #fffdf7;
-        background: linear-gradient(
-          140deg,
-          color-mix(in srgb, var(--accent) 82%, #fff),
-          var(--accent)
-        );
-        border-color: color-mix(in srgb, var(--accent) 60%, transparent);
-        box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--accent) 95%, transparent);
-      }
-      .panels {
-        padding: 18px;
-      }
-      .panel {
-        display: none;
-      }
-      .panel.is-active {
-        display: block;
-        animation: panelIn 0.5s cubic-bezier(0.19, 0.85, 0.24, 1);
-      }
-      @keyframes panelIn {
-        from {
-          opacity: 0;
-          transform: translateY(14px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* ---------- карточки местоимений ---------- */
-      .pron-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .pron {
-        border-radius: 16px;
-        padding: 13px 12px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid color-mix(in srgb, var(--pro) 22%, transparent);
-        box-shadow: 0 8px 20px -18px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          border-color 0.35s,
-          background 0.35s;
-      }
-      .pron:hover {
-        transform: translateY(-4px);
-        background: color-mix(in srgb, var(--pro) 7%, #fff);
-        border-color: color-mix(in srgb, var(--pro) 55%, transparent);
-      }
-      .pron .p-ar {
-        display: block;
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: clamp(22px, 6vw, 26px);
-        font-weight: 700;
-        line-height: 2.3;
-        color: var(--pro);
-      }
-      .pron .p-tr {
-        display: block;
-        font-family: 'Manrope Variable', sans-serif;
-        font-style: italic;
-        font-size: 12.5px;
-        color: var(--muted);
-        margin-top: 2px;
-      }
-      .pron .p-ru {
-        display: block;
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 13.5px;
-        font-weight: 800;
-        color: var(--ink);
-        margin-top: 3px;
-        line-height: 1.45;
-      }
-      .pron.wide {
-        grid-column: 1/-1;
-      }
-
-      /* ---------- конструктор ---------- */
-      .builder {
-        border-radius: var(--r);
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
-        box-shadow: var(--shadow);
-      }
-      .b-col {
-        padding: 18px 18px 8px;
-      }
-      .b-col + .b-col {
-        border-top: 1px solid rgba(120, 92, 44, 0.1);
-      }
-      .b-label {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        font-weight: 800;
-        color: var(--c);
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin: 0 0 12px;
-        flex-wrap: wrap;
-      }
-      .b-label em {
-        font-style: normal;
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 0;
-        text-transform: none;
-        color: var(--c);
-        opacity: 0.95;
-        line-height: 2;
-      }
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .chip {
-        font-family: inherit;
-        cursor: pointer;
-        border-radius: 14px;
-        padding: 8px 13px 6px;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid var(--line);
-        color: var(--ink-soft);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1px;
-        line-height: 1;
-        box-shadow: 0 6px 16px -14px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-          background 0.3s,
-          border-color 0.3s;
-      }
-      .chip .ca {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 19px;
-        font-weight: 700;
-        line-height: 2.1;
-        color: var(--ar);
-      }
-      .chip .cr {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 11px;
-        color: var(--muted);
-        font-weight: 600;
-        line-height: 1.5;
-      }
-      .chip:hover {
-        transform: translateY(-3px);
-        border-color: color-mix(in srgb, var(--c) 45%, transparent);
-        background: color-mix(in srgb, var(--c) 6%, #fff);
-      }
-      .chip[aria-pressed='true'] {
-        background: color-mix(in srgb, var(--c) 12%, #fff);
-        border-color: color-mix(in srgb, var(--c) 55%, transparent);
-        box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--c) 95%, transparent);
-      }
-      .chip[aria-pressed='true'] .ca {
-        color: var(--c);
-      }
-      .chip[aria-pressed='true'] .cr {
-        color: var(--ink-soft);
-      }
-      .result {
-        padding: 20px 18px 24px;
-        background: rgba(120, 92, 44, 0.05);
-        border-top: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .res-ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: center;
-        font-size: clamp(28px, 8vw, 36px);
-        font-weight: 700;
-        line-height: 2.6;
-        margin: 0;
-        color: var(--ar);
-      }
-      .flash {
-        animation: flashIn 0.55s cubic-bezier(0.19, 0.85, 0.24, 1);
-      }
-      @keyframes flashIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px) scale(0.97);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      .res-meta {
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-      }
-
-      /* ---------- таблица суффиксов ---------- */
-      .sfx-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-top: 4px;
-      }
-      .sfx-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        align-items: center;
-        gap: 12px;
-        padding: 11px 14px;
-        border-radius: 15px;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid var(--line);
-        box-shadow: 0 8px 20px -18px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s,
-          border-color 0.35s,
-          background 0.35s;
-      }
-      .sfx-item:hover {
-        transform: translateY(-3px);
-        background: color-mix(in srgb, var(--sfx) 7%, #fff);
-        border-color: color-mix(in srgb, var(--sfx) 42%, transparent);
-      }
-      .sfx-item .a {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 2.1;
-        color: var(--sfx);
-        min-width: 44px;
-        text-align: center;
-      }
-      .sfx-item .r {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 12.5px;
-        color: var(--ink);
-        font-weight: 700;
-        line-height: 1.5;
-      }
-      .sfx-item .r i {
-        display: block;
-        font-style: italic;
-        font-weight: 500;
-        color: var(--muted);
-        font-size: 11.5px;
-      }
-
-      /* ---------- глагольные формы ---------- */
-      .verb-list {
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-      }
-      .verb {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        gap: 14px;
-        padding: 11px 16px;
-        border-radius: 15px;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid var(--line);
-        box-shadow: 0 8px 20px -18px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s,
-          border-color 0.35s;
-      }
-      .verb:hover {
-        transform: translateX(4px);
-        border-color: rgba(169, 118, 42, 0.42);
-      }
-      .verb .v-ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 23px;
-        font-weight: 700;
-        line-height: 2.3;
-        color: var(--ar);
-      }
-      .verb .v-ar b {
-        color: var(--gold);
-        font-weight: 700;
-      }
-      .verb .v-ru {
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: var(--muted);
-        text-align: right;
-        line-height: 1.5;
-      }
-
-      /* ---------- указательные / вопросительные ---------- */
-      .lex-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .lex {
-        border-radius: 16px;
-        padding: 13px 12px;
-        text-align: center;
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62));
-        border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
-        box-shadow: 0 10px 24px -20px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          border-color 0.35s,
-          background 0.35s;
-      }
-      .lex:hover {
-        transform: translateY(-4px);
-        background: color-mix(in srgb, var(--c) 8%, #fff);
-        border-color: color-mix(in srgb, var(--c) 55%, transparent);
-      }
-      .lex .a {
-        display: block;
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 2.3;
-        color: var(--c);
-      }
-      .lex .t {
-        display: block;
-        font-family: 'Manrope Variable', sans-serif;
-        font-style: italic;
-        font-size: 11.5px;
-        color: var(--muted);
-        margin-top: 2px;
-      }
-      .lex .r {
-        display: block;
-        font-family: 'Manrope Variable', sans-serif;
-        font-size: 13px;
-        font-weight: 800;
-        color: var(--ink);
-        margin-top: 3px;
-      }
-
-      /* ---------- предложения ---------- */
-      .sents {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .sent {
-        border-radius: 18px;
-        padding: 14px 18px 16px;
-        background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.65));
-        border: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-        box-shadow: 0 10px 26px -22px rgba(120, 92, 44, 0.9);
-        transition:
-          transform 0.35s,
-          border-color 0.35s;
-      }
-      .sent:hover {
-        transform: translateY(-3px);
-        border-color: rgba(43, 111, 196, 0.4);
-      }
-      .sent .s-ar {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 23px;
-        font-weight: 700;
-        line-height: 2.5;
-        color: var(--ar);
-      }
-      .sent .s-tr {
-        font-family: 'Manrope Variable', sans-serif;
-        font-style: italic;
-        font-size: 13.5px;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-      .sent .s-ru {
-        font-size: 16px;
-        color: var(--ink-soft);
-        line-height: 1.75;
-        margin: 0;
-      }
-
-      /* ---------- ошибки ---------- */
-      .mistakes {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .mk {
-        border-radius: 18px;
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.72));
-        box-shadow: 0 10px 26px -22px rgba(120, 92, 44, 0.9);
-      }
-      .mk-row {
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 15px;
-      }
-      .mk-row + .mk-row {
-        border-top: 1px dashed rgba(120, 92, 44, 0.22);
-      }
-      .mk-row .sign {
-        width: 26px;
-        height: 26px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 14px;
-      }
-      .mk-row.no .sign {
-        color: #fffdf7;
-        background: var(--bad);
-        box-shadow: 0 6px 14px -8px rgba(194, 80, 79, 1);
-      }
-      .mk-row.yes .sign {
-        color: #fffdf7;
-        background: var(--emerald);
-        box-shadow: 0 6px 14px -8px rgba(15, 143, 102, 1);
-      }
-      .mk-row .val {
-        font-family: 'Noto Naskh Arabic', serif;
-        direction: rtl;
-        text-align: right;
-        font-size: 21px;
-        font-weight: 700;
-        line-height: 2.3;
-      }
-      .mk-row.no .val {
-        color: #b07573;
-        text-decoration: line-through;
-        text-decoration-color: rgba(194, 80, 79, 0.6);
-      }
-      .mk-row.yes .val {
-        color: var(--emerald);
-      }
-      .mk-note {
-        padding: 0 15px 14px;
-        font-size: 14.5px;
-        line-height: 1.75;
-        color: var(--muted);
-        margin: 0;
-      }
-
-      /* ---------- кнопка ---------- */
-      .menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-family: 'Manrope Variable', sans-serif;
-        font-weight: 800;
-        font-size: 15.5px;
-        text-decoration: none;
-        color: #fffdf7;
-        padding: 16px 22px;
-        border-radius: 20px;
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(140deg, var(--azure-lt), var(--azure) 62%, var(--azure-dk));
-        border: 1px solid rgba(29, 81, 150, 0.3);
-        box-shadow: 0 18px 36px -18px rgba(43, 111, 196, 0.9);
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-          box-shadow 0.35s;
-      }
-      .menu-btn::after {
-        content: '';
-        position: absolute;
-        top: -60%;
-        left: -70%;
-        width: 48%;
-        height: 220%;
-        background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-        transform: rotate(14deg);
-        transition: transform 0.8s cubic-bezier(0.3, 0.8, 0.2, 1);
-      }
-      .menu-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 24px 44px -18px rgba(43, 111, 196, 1);
-      }
-      .menu-btn:hover::after {
-        transform: rotate(14deg) translateX(440%);
-      }
-      .menu-btn:active {
-        transform: scale(0.985);
-      }
-      .menu-btn svg {
-        width: 18px;
-        height: 18px;
-      }
-
-      /* ---------- появление ---------- */
-      .reveal {
-        opacity: 0;
-        transform: translateY(26px);
-      }
-      .reveal.in {
-        animation: rise 0.85s cubic-bezier(0.19, 0.85, 0.24, 1) forwards;
-        animation-delay: calc(var(--i, 0) * 90ms);
-      }
-      @keyframes rise {
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* ---------- переход ---------- */
-      .veil {
-        position: fixed;
-        inset: 0;
-        z-index: 90;
-        pointer-events: none;
-        display: grid;
-        place-items: center;
-        background: radial-gradient(
-          circle at var(--x, 50%) var(--y, 50%),
-          rgba(255, 253, 247, 0.98) 0%,
-          rgba(111, 168, 232, 0.92) 30%,
-          rgba(43, 111, 196, 0.96) 66%
-        );
-        clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
-        transition: clip-path 0.58s cubic-bezier(0.65, 0, 0.15, 1);
-      }
-      .veil.on {
-        clip-path: circle(160vmax at var(--x, 50%) var(--y, 50%));
-      }
-      .veil-mark {
-        width: 96px;
-        height: 96px;
-        opacity: 0;
-        transform: scale(0.55) rotate(-40deg);
-        color: #fffdf7;
-        transition:
-          opacity 0.4s 0.18s,
-          transform 0.6s 0.18s cubic-bezier(0.2, 0.9, 0.2, 1);
-      }
-      .veil.on .veil-mark {
-        opacity: 0.95;
-        transform: scale(1) rotate(0);
-      }
-      .veil-mark svg {
-        width: 100%;
-        height: 100%;
-        animation: spin 9s linear infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      body.leaving main {
-        animation: fadeOut 0.42s ease forwards;
-      }
-      @keyframes fadeOut {
-        to {
-          opacity: 0.2;
-          transform: scale(0.99);
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          animation: none !important;
-          transition: none !important;
-        }
-        .reveal {
-          opacity: 1;
-          transform: none;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/mestoimeniya.css" />
   </head>
   <body>
     <div class="bg"></div>
@@ -1071,7 +57,7 @@
         <div class="ar-hero" lang="ar" dir="rtl">الضَّمَائِر</div>
         <p class="lead">
           «Я», «ты», «он», «моя книга», «это», «кто?» — всё, что заменяет имя. Разбираем отдельные
-          местоимения и те, что прирастают к слову.
+          местоимения и&nbsp;те, что прирастают к слову.
         </p>
       </section>
 
@@ -1086,30 +72,30 @@
         </div>
 
         <p>
-          Местоимение в арабском называется
+          Местоимение в&nbsp;арабском называется
           <span class="ar-term" lang="ar" dir="rtl">ضَمِير</span>
           (мн. ч.
           <span class="ar" lang="ar" dir="rtl">ضَمَائِر</span>) — дословно «то, что спрятано
-          внутри». Оно указывает на человека или предмет, не называя его: <b>я</b>, <b>ты</b>,
-          <b>он</b>, <b>это</b>, <b>кто</b>.
+          внутри». Оно указывает на человека или предмет, неназывая его: <b>я</b>, <b>ты</b>,
+          <b>он</b>, <b>это</b>.
         </p>
         <p>
-          Главное отличие от русского: арабские местоимения бывают
-          <b>отдельными</b> — живут сами по себе, и <b>присоединёнными</b> — прирастают к концу
-          слова и означают принадлежность или объект действия.
+          Главное отличие от&nbsp;русского: арабские местоимения бывают
+          <b>отдельными</b> — живут сами по себе, и&nbsp;<b>присоединёнными</b> — прирастают
+          к&nbsp;концу слова и&nbsp;означают принадлежность или&nbsp;объект действия.
         </p>
 
         <div class="example">
           <p class="tag">Сравните</p>
           <p class="ar-block" lang="ar" dir="rtl"><span class="hl-pro">أَنَا</span> طَالِبٌ</p>
           <p class="translit">
-            ана талибун · «я студент» — <span class="hl-pro">أَنَا</span> отдельное
+            «Я студент» — &nbsp;<span class="hl-pro">أَنَا</span>&nbsp;&nbsp;отдельное
           </p>
           <p class="ar-block" lang="ar" dir="rtl" style="padding-top: 6px">
-            هَذَا كِتَابُ<span class="hl-sfx">ـي</span>
+            كِتَابِ<span class="hl-sfx">ـي</span>
           </p>
           <p class="translit">
-            хаза китаби · «это моя книга» — <span class="hl-sfx">ـي</span> приросло к слову
+            «Это моя книга» — &nbsp;<span class="hl-sfx">ـي</span>&nbsp;&nbsp;приросло к&nbsp;слову
           </p>
         </div>
       </section>
@@ -1127,8 +113,9 @@
         </div>
 
         <p>
-          Их двенадцать: по лицам, числам и родам. Обратите внимание — у арабского «ты» и «вы» есть
-          мужская и женская формы, а ещё есть двойственное число «вы двое».
+          Их двенадцать: по лицам, числам и&nbsp;родам. Обратите внимание — у&nbsp;арабского «ты»
+          и&nbsp;«вы» есть мужская и&nbsp;женская формы, а&nbsp;ещё&nbsp;есть двойственное число
+          «вы&nbsp;двое».
         </p>
 
         <div class="tabs-wrap">
@@ -1173,17 +160,14 @@
               <div class="pron-grid">
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">أَنَا</span>
-                  <span class="p-tr">ана</span>
                   <span class="p-ru">я</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">نَحْنُ</span>
-                  <span class="p-tr">нахну</span>
                   <span class="p-ru">мы</span>
                 </div>
                 <div class="pron wide">
                   <span class="p-ar" lang="ar" dir="rtl">أَنَا طَالِبٌ</span>
-                  <span class="p-tr">ана талибун</span>
                   <span class="p-ru">«я студент»</span>
                 </div>
               </div>
@@ -1193,27 +177,22 @@
               <div class="pron-grid">
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">أَنْتَ</span>
-                  <span class="p-tr">анта</span>
                   <span class="p-ru">ты (м. р.)</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">أَنْتِ</span>
-                  <span class="p-tr">анти</span>
                   <span class="p-ru">ты (ж. р.)</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">أَنْتُمَا</span>
-                  <span class="p-tr">антума</span>
                   <span class="p-ru">вы двое</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">أَنْتُمْ</span>
-                  <span class="p-tr">антум</span>
                   <span class="p-ru">вы (м. р.)</span>
                 </div>
                 <div class="pron wide">
                   <span class="p-ar" lang="ar" dir="rtl">أَنْتُنَّ</span>
-                  <span class="p-tr">антунна</span>
                   <span class="p-ru">вы (ж. р.)</span>
                 </div>
               </div>
@@ -1223,27 +202,22 @@
               <div class="pron-grid">
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">هُوَ</span>
-                  <span class="p-tr">хува</span>
                   <span class="p-ru">он</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">هِيَ</span>
-                  <span class="p-tr">хийа</span>
                   <span class="p-ru">она</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">هُمَا</span>
-                  <span class="p-tr">хума</span>
                   <span class="p-ru">они двое</span>
                 </div>
                 <div class="pron">
                   <span class="p-ar" lang="ar" dir="rtl">هُمْ</span>
-                  <span class="p-tr">хум</span>
                   <span class="p-ru">они (м. р.)</span>
                 </div>
                 <div class="pron wide">
                   <span class="p-ar" lang="ar" dir="rtl">هُنَّ</span>
-                  <span class="p-tr">хунна</span>
                   <span class="p-ru">они (ж. р.)</span>
                 </div>
               </div>
@@ -1265,40 +239,36 @@
         </div>
 
         <p>
-          Эти местоимения не стоят отдельно — они «прилипают» к концу слова и превращаются в
-          окончание. У существительного они означают <b>принадлежность</b>, у глагола —
-          <b>объект действия</b>, а после предлога — <b>«у него», «со мной»</b>.
+          Эти местоимения не&nbsp;стоят отдельно — они&nbsp;«прилипают» к&nbsp;концу слова
+          и&nbsp;превращаются в&nbsp;окончание. У&nbsp;существительного они&nbsp;означают
+          <b>принадлежность</b>, у&nbsp;глагола — <b>объект действия</b>, а&nbsp;после предлога —
+          <b>«у&nbsp;него», «со&nbsp;мной»</b>.
         </p>
 
         <div class="sfx-grid">
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـي</span><span class="r">мой · меня<i>-и</i></span>
+            <span class="a" lang="ar" dir="rtl">ـي</span><span class="r">мой ·&nbsp;меня</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـكَ</span
-            ><span class="r">твой (м. р.)<i>-ка</i></span>
+            <span class="a" lang="ar" dir="rtl">ـكَ</span><span class="r">твой (м.р.)</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـكِ</span
-            ><span class="r">твой (ж. р.)<i>-ки</i></span>
+            <span class="a" lang="ar" dir="rtl">ـكِ</span><span class="r">твой (ж.р.)</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـهُ</span><span class="r">его<i>-ху</i></span>
+            <span class="a" lang="ar" dir="rtl">ـهُ</span><span class="r">его</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـها</span><span class="r">её<i>-ха</i></span>
+            <span class="a" lang="ar" dir="rtl">ـها</span><span class="r">её</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـكُمْ</span
-            ><span class="r">ваш (м. р.)<i>-кум</i></span>
+            <span class="a" lang="ar" dir="rtl">ـكُمْ</span><span class="r">ваш (м.р.)</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـهُمْ</span
-            ><span class="r">их (м. р.)<i>-хум</i></span>
+            <span class="a" lang="ar" dir="rtl">ـهُمْ</span><span class="r">их (м.р.)</span>
           </div>
           <div class="sfx-item">
-            <span class="a" lang="ar" dir="rtl">ـنَا</span
-            ><span class="r">наш · нас<i>-на</i></span>
+            <span class="a" lang="ar" dir="rtl">ـنَا</span><span class="r">наш ·&nbsp;нас</span>
           </div>
         </div>
 
@@ -1306,7 +276,7 @@
           Для двойственного числа добавляются
           <span class="ar" lang="ar" dir="rtl">ـكُمَا</span>
           и
-          <span class="ar" lang="ar" dir="rtl">ـهُمَا</span> — «ваш двоих» и «их двоих».
+          <span class="ar" lang="ar" dir="rtl">ـهُمَا</span> — «ваш&nbsp;двоих» и&nbsp;«их двоих».
         </p>
       </section>
 
@@ -1343,10 +313,10 @@
                 <span class="ca" lang="ar" dir="rtl">ـي</span><span class="cr">мой</span>
               </button>
               <button class="chip" type="button" aria-pressed="false" data-key="ka">
-                <span class="ca" lang="ar" dir="rtl">ـكَ</span><span class="cr">твой (м.)</span>
+                <span class="ca" lang="ar" dir="rtl">ـكَ</span><span class="cr">твой (м)</span>
               </button>
               <button class="chip" type="button" aria-pressed="false" data-key="ki">
-                <span class="ca" lang="ar" dir="rtl">ـكِ</span><span class="cr">твой (ж.)</span>
+                <span class="ca" lang="ar" dir="rtl">ـكِ</span><span class="cr">твой (ж)</span>
               </button>
               <button class="chip" type="button" aria-pressed="false" data-key="hu">
                 <span class="ca" lang="ar" dir="rtl">ـهُ</span><span class="cr">его</span>
@@ -1360,7 +330,6 @@
           <div class="result">
             <p class="res-ar" id="resAr" lang="ar" dir="rtl">كِتَابِي</p>
             <div class="res-meta">
-              <p class="translit" id="resTr">китаби</p>
               <p class="ru" id="resRu">«моя книга»</p>
             </div>
           </div>
@@ -1372,16 +341,16 @@
         <div class="sec-head">
           <span class="sec-num">5</span>
           <div>
-            <h2>Местоимение спрятано в глаголе</h2>
+            <h2>Местоимение спрятано в&nbsp;глаголе</h2>
             <p class="sec-sub">Приставка уже говорит, кто действует</p>
           </div>
         </div>
 
         <p>
-          Начало глагола показывает лицо, поэтому отдельное местоимение часто не нужно:
+          Начало глагола показывает лицо, поэтому отдельное местоимение часто не&nbsp;нужно:
           <span class="ar" lang="ar" dir="rtl">أَكْتُبُ</span>
-          — это уже «я пишу». Само местоимение добавляют, когда хотят усилить: «именно
-          <b>я</b> пишу».
+          — это уже «я&nbsp;пишу». Само местоимение добавляют, когда хотят усилить: «именно
+          <b>я</b>&nbsp;пишу».
         </p>
 
         <div class="verb-list">
@@ -1391,7 +360,7 @@
           </div>
           <div class="verb">
             <span class="v-ar" lang="ar" dir="rtl"><b>تَ</b>كْتُبُ</span>
-            <span class="v-ru">ты (м.) пишешь · она пишет</span>
+            <span class="v-ru">ты (м) пишешь · она пишет</span>
           </div>
           <div class="verb">
             <span class="v-ar" lang="ar" dir="rtl"><b>يَ</b>كْتُبُ</span>
@@ -1414,31 +383,27 @@
           </div>
         </div>
 
-        <p>Род и число важны: слово согласуется с тем, на что указывает.</p>
+        <p>Род и число важны: слово согласуется с&nbsp;тем, на&nbsp;что указывает.</p>
 
         <div class="lex-grid" style="--c: var(--gold)">
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">هَذَا</span><span class="t">хаза</span
-            ><span class="r">этот · это (м. р.)</span>
+            <span class="a" lang="ar" dir="rtl">هَذَا</span>
+            <span class="r">этот · это (м. р.)</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">هَذِهِ</span><span class="t">хазихи</span
-            ><span class="r">эта (ж. р.)</span>
+            <span class="a" lang="ar" dir="rtl">هَذِهِ</span><span class="r">эта (ж. р.)</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">ذَلِكَ</span><span class="t">залика</span
-            ><span class="r">тот (м. р.)</span>
+            <span class="a" lang="ar" dir="rtl">ذَلِكَ</span><span class="r">тот (м. р.)</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">تِلْكَ</span><span class="t">тилька</span
-            ><span class="r">та (ж. р.)</span>
+            <span class="a" lang="ar" dir="rtl">تِلْكَ</span><span class="r">та (ж. р.)</span>
           </div>
         </div>
 
         <div class="example" style="margin-top: 16px">
           <p class="tag">Пример</p>
           <p class="ar-block" lang="ar" dir="rtl"><span class="hl-gold">هَذَا</span> بَيْتِي</p>
-          <p class="translit">хаза байти</p>
           <p class="ru">«Это мой дом»</p>
         </div>
       </section>
@@ -1455,36 +420,28 @@
 
         <div class="lex-grid" style="--c: var(--amber)">
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">مَنْ</span><span class="t">ман</span
-            ><span class="r">кто</span>
+            <span class="a" lang="ar" dir="rtl">مَنْ</span><span class="r">кто</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">مَا</span><span class="t">ма</span
-            ><span class="r">что</span>
+            <span class="a" lang="ar" dir="rtl">مَا</span><span class="r">что</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">مَاذَا</span><span class="t">маза</span
-            ><span class="r">что</span>
+            <span class="a" lang="ar" dir="rtl">مَاذَا</span><span class="r">что</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">أَيْنَ</span><span class="t">айна</span
-            ><span class="r">где</span>
+            <span class="a" lang="ar" dir="rtl">أَيْنَ</span><span class="r">где</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">مَتَى</span><span class="t">мата</span
-            ><span class="r">когда</span>
+            <span class="a" lang="ar" dir="rtl">مَتَى</span><span class="r">когда</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">كَيْفَ</span><span class="t">кайфа</span
-            ><span class="r">как</span>
+            <span class="a" lang="ar" dir="rtl">كَيْفَ</span><span class="r">как</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">لِمَاذَا</span><span class="t">лимаза</span
-            ><span class="r">почему</span>
+            <span class="a" lang="ar" dir="rtl">لِمَاذَا</span><span class="r">почему</span>
           </div>
           <div class="lex">
-            <span class="a" lang="ar" dir="rtl">كَمْ</span><span class="t">кам</span
-            ><span class="r">сколько</span>
+            <span class="a" lang="ar" dir="rtl">كَمْ</span><span class="r">сколько</span>
           </div>
         </div>
 
@@ -1493,7 +450,6 @@
           <p class="ar-block" lang="ar" dir="rtl">
             <span class="hl-gold">أَيْنَ</span> كِتَابُ<span class="hl-sfx">ـكَ</span>؟
           </p>
-          <p class="translit">айна китабука</p>
           <p class="ru">«Где твоя книга?»</p>
         </div>
       </section>
@@ -1503,7 +459,7 @@
         <div class="sec-head">
           <span class="sec-num">8</span>
           <div>
-            <h2>Всё вместе в предложениях</h2>
+            <h2>Всё вместе в&nbsp;предложениях</h2>
             <p class="sec-sub">Как это звучит в речи</p>
           </div>
         </div>
@@ -1511,31 +467,26 @@
         <div class="sents">
           <div class="sent">
             <span class="s-ar" lang="ar" dir="rtl"><span class="hl-pro">أَنَا</span> طَالِبٌ</span>
-            <span class="s-tr">ана талибун</span>
             <p class="s-ru">«Я студент»</p>
           </div>
           <div class="sent">
             <span class="s-ar" lang="ar" dir="rtl"
-              ><span class="hl-pro">هِيَ</span> مُدَرِّسَةٌ</span
-            >
-            <span class="s-tr">хийа мударрисатун</span>
+              ><span class="hl-pro">هِيَ</span> مُدَرِّسَةٌ
+            </span>
             <p class="s-ru">«Она учительница»</p>
           </div>
           <div class="sent">
             <span class="s-ar" lang="ar" dir="rtl"
-              >هَذَا كِتَابُ<span class="hl-sfx">ـي</span></span
-            >
-            <span class="s-tr">хаза китаби</span>
+              >هَذَا كِتَابُ<span class="hl-sfx">ـي</span>
+            </span>
             <p class="s-ru">«Это моя книга»</p>
           </div>
           <div class="sent">
             <span class="s-ar" lang="ar" dir="rtl">رَأَيْتُ<span class="hl-sfx">ـهُ</span></span>
-            <span class="s-tr">ра’айтуху</span>
             <p class="s-ru">«Я увидел его»</p>
           </div>
           <div class="sent">
             <span class="s-ar" lang="ar" dir="rtl">مَنْ <span class="hl-pro">هُوَ</span>؟</span>
-            <span class="s-tr">ман хува</span>
             <p class="s-ru">«Кто он?»</p>
           </div>
         </div>
@@ -1560,8 +511,8 @@
               <span class="sign">✓</span><span class="val" lang="ar" dir="rtl">كِتَابِي</span>
             </div>
             <p class="mk-note">
-              Принадлежность передаётся суффиксом, который пишется слитно со словом, а не отдельным
-              местоимением.
+              Принадлежность передаётся суффиксом, который пишется слитно со&nbsp;словом,
+              а&nbsp;не&nbsp;отдельным местоимением.
             </p>
           </div>
 
@@ -1576,7 +527,8 @@
             </div>
             <p class="mk-note">
               Формы «ты» различаются по роду: <span class="ar" lang="ar" dir="rtl">أَنْتَ</span> —
-              мужчине, <span class="ar" lang="ar" dir="rtl">أَنْتِ</span> — женщине.
+              &nbsp;&nbsp;мужчине, <br /><span class="ar" lang="ar" dir="rtl">أَنْتِ</span> —
+              &nbsp;&nbsp;женщине.
             </p>
           </div>
 
@@ -1590,8 +542,10 @@
               ><span class="val" lang="ar" dir="rtl">هِيَ مُدَرِّسَةٌ</span>
             </div>
             <p class="mk-note">
-              О женщине — <span class="ar" lang="ar" dir="rtl">هِيَ</span>, о мужчине —
-              <span class="ar" lang="ar" dir="rtl">هُوَ</span>.
+              О женщине&nbsp;&nbsp; — <span class="ar" lang="ar" dir="rtl">هِيَ</span>,
+              &nbsp;о&nbsp;мужчине&nbsp;&nbsp;&nbsp;—&nbsp;<span class="ar" lang="ar" dir="rtl"
+                >هُوَ</span
+              >.
             </p>
           </div>
         </div>
@@ -1698,33 +652,33 @@
             ru: 'книга',
             g: 'f',
             forms: {
-              i: ['كِتَابِي', 'китаби'],
-              ka: ['كِتَابُكَ', 'китабука'],
-              ki: ['كِتَابُكِ', 'китабуки'],
-              hu: ['كِتَابُهُ', 'китабуху'],
-              ha: ['كِتَابُهَا', 'китабуха'],
+              i: 'كِتَابِي',
+              ka: 'كِتَابُكَ',
+              ki: 'كِتَابُكِ',
+              hu: 'كِتَابُهُ',
+              ha: 'كِتَابُهَا',
             },
           },
           bayt: {
             ru: 'дом',
             g: 'm',
             forms: {
-              i: ['بَيْتِي', 'байти'],
-              ka: ['بَيْتُكَ', 'байтука'],
-              ki: ['بَيْتُكِ', 'байтуки'],
-              hu: ['بَيْتُهُ', 'байтуху'],
-              ha: ['بَيْتُهَا', 'байтуха'],
+              i: 'بَيْتِي',
+              ka: 'بَيْتُكَ',
+              ki: 'بَيْتُكِ',
+              hu: 'بَيْتُهُ',
+              ha: 'بَيْتُهَا',
             },
           },
           sayyara: {
             ru: 'машина',
             g: 'f',
             forms: {
-              i: ['سَيَّارَتِي', 'сайярати'],
-              ka: ['سَيَّارَتُكَ', 'сайяратука'],
-              ki: ['سَيَّارَتُكِ', 'сайяратуки'],
-              hu: ['سَيَّارَتُهُ', 'сайяратуху'],
-              ha: ['سَيَّارَتُهَا', 'сайяратуха'],
+              i: 'سَيَّارَتِي',
+              ka: 'سَيَّارَتُكَ',
+              ki: 'سَيَّارَتُكِ',
+              hu: 'سَيَّارَتُهُ',
+              ha: 'سَيَّارَتُهَا',
             },
           },
         };
@@ -1740,7 +694,6 @@
         var groupA = document.getElementById('groupA');
         var groupB = document.getElementById('groupB');
         var resAr = document.getElementById('resAr');
-        var resTr = document.getElementById('resTr');
         var resRu = document.getElementById('resRu');
 
         function picked(group) {
@@ -1751,12 +704,14 @@
           var a = picked(groupA),
             b = picked(groupB);
           if (!a || !b) return;
+
           var base = BASES[a.dataset.key];
           var form = base.forms[b.dataset.key];
           var poss = POSSESSIVE[b.dataset.key][base.g === 'm' ? 'm' : 'f'];
-          resAr.textContent = form[0];
-          resTr.textContent = form[1];
+
+          resAr.textContent = form;
           resRu.textContent = '«' + poss + ' ' + base.ru + '»';
+
           if (!reduce) {
             resAr.classList.remove('flash');
             void resAr.offsetWidth;
@@ -1774,6 +729,7 @@
             render();
           });
         }
+
         bindGroup(groupA);
         bindGroup(groupB);
         render();
